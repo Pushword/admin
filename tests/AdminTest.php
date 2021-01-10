@@ -38,13 +38,21 @@ class AdminTest extends WebTestCase
         return $client;
     }
 
-    public function testPageList()
+    public function testAdmins()
     {
         $client = $this->loginUser();
 
-        $crawler = $client->request('GET', '/admin/app/page/list');
+        $client->catchExceptions(false);
 
-        $this->assertResponseIsSuccessful();
+        $actions = ['list', 'create'];
+        $admins = ['user', 'media', 'page'];
+
+        foreach ($admins as $admin) {
+            foreach ($actions as $action) {
+                $client->request('GET', '/admin/app/'.$admin.'/'.$action);
+                $this->assertResponseIsSuccessful();
+            }
+        }
     }
 
     private function createUser()
