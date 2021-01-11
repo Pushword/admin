@@ -17,7 +17,7 @@
     },
     "patches": {
       "sonata-project/admin-bundle": [
-        "packages/admin/patches/sonata-project-admin-bundle-src-datagrid-pager-php.patch"
+        "patches/sonata-project-admin-bundle-src-datagrid-pager-php.patch"
       ]
     }
   },
