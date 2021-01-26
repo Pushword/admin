@@ -1,8 +1,7 @@
 <?php
 
-namespace Pushword\Admin\Page;
+namespace Pushword\Admin;
 
-use Pushword\Admin\AdminTrait;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -10,7 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Object\Metadata;
 use Sonata\AdminBundle\Object\MetadataInterface;
 
-class Admin extends AbstractAdmin implements AdminInterface
+class PageAdmin extends AbstractAdmin implements PageAdminInterface
 {
     use AdminTrait;
 

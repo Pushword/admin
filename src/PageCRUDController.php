@@ -1,6 +1,6 @@
 <?php
 
-namespace Pushword\Admin\Page;
+namespace Pushword\Admin;
 
 use Pushword\Core\Repository\Repository;
 use Sonata\AdminBundle\Controller\CRUDController as SonataCRUDController;
@@ -8,10 +8,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CRUDController extends SonataCRUDController implements CRUDControllerInterface
+class PageCRUDController extends SonataCRUDController implements PageCRUDControllerInterface
 {
     protected $params;
 
+    /** @required */
     public function setParams(ParameterBagInterface $params)
     {
         $this->params = $params;
