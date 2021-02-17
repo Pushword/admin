@@ -82,14 +82,14 @@ class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
             $formMapper->with('admin.media.preview.label', [
                 'class' => 'col-md-12',
                 'description' => $this->showMediaPreview(),
-                //'empty_message' => false, // to uncomment when sonataAdmin 3.62 is released
+                'empty_message' => false,
             ])->end();
 
             if ($this->issetRelatedPages()) {
                 $formMapper->with('admin.media.related.label', [
                     'class' => 'col-md-12',
                     'description' => $this->showRelatedPages(),
-                    //'empty_message' => false, /// to uncomment when sonataAdmin 3.62 is released
+                    'empty_message' => false,
                 ])->end();
             }
         }
