@@ -115,10 +115,7 @@ class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
     {
         $relatedPages = $this->getRelatedPages();
 
-        if (! empty($relatedPages['content'])
-            || $relatedPages['gallery']->count() > 0
-            || $relatedPages['mainImage']->count() > 0
-        ) {
+        if (! empty($relatedPages['content']) || $relatedPages['mainImage']->count() > 0) {
             return true;
         } else {
             return false;
@@ -134,11 +131,10 @@ class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
         $media = $this->getSubject();
 
         $pages = Repository::getPageRepository($this->em, $this->pageClass)
-            ->getPagesUsingMedia($this->imageManager->getBrowserPath($media));
+            ->getPagesUsingMedia($media->getMedia()); //$this->imageManager->getBrowserPath($media));
 
         $this->relatedPages = [
             'content' => $pages,
-            'gallery' => $media->getPageHasMedias(),
             'mainImage' => $media->getMainImagePages(),
         ];
 
