@@ -22,7 +22,6 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "cweagans/composer-patches": "^1.7"
     },
     "authors": [
         {
