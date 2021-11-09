@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Object\Metadata;
-use Sonata\AdminBundle\Object\MetadataInterface;
 
 class PageAdmin extends AbstractAdmin implements PageAdminInterface
 {
@@ -152,7 +151,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         ]);
     }
 
-    public function getObjectMetadata(object $object): MetadataInterface
+    public function getObjectMetadata(object $object): Metadata
     {
         $media = $object->getMainImage();
         if ($media && $this->imageManager->isImage($media)) {

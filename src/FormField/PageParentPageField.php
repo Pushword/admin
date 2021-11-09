@@ -20,11 +20,13 @@ class PageParentPageField extends AbstractField
                     'required' => false,
                 ],
                 ($this->admin->getSubject()->getId() ? ['query_builder' => function (PageRepository $er) {
-                    //$qb->andWhere('p.parentPage != :page')->setParameter('page', $this->admin->getSubject()->getId());
-
-                    return $er->createQueryBuilder('p')
+                    $qb = $er->createQueryBuilder('p')
                         ->andWhere('p.id != :id')
                         ->setParameter('id', $this->admin->getSubject()->getId());
+
+                    //$qb->andWhere('p.parentPage != :page')->setParameter('page', $this->admin->getSubject()->getId());
+
+                    return $qb;
                 }] : [])
             )
         );

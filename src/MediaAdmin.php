@@ -8,7 +8,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Object\Metadata; //use Sonata\BlockBundle\Meta\Metadata;
-use Sonata\AdminBundle\Object\MetadataInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
 {
     use AdminTrait;
+
+    private $relatedPages;
 
     private $messagePrefix = 'admin.media';
 
@@ -108,7 +109,7 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
         ]);
     }
 
-    public function getObjectMetadata(object $object): MetadataInterface
+    public function getObjectMetadata(object $object): Metadata
     {
         if ($this->imageManager->isImage($object)) {
             $thumb = $this->imageManager->getBrowserPath($object, 'thumb');
