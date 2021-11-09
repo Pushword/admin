@@ -66,6 +66,10 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         $form->end();
 
         foreach ($fields[1] as $k => $block) {
+            if (! ($this->getSubject() && $this->getSubject()->getSlug()) && 'admin.page.revisions' == $k) {
+                continue;
+            }
+
             $fields = $block['fields'] ?? $block;
             $class = isset($block['expand']) ? 'expand' : '';
             $form->with($k, ['class' => 'col-md-3 columnFields '.$class, 'label' => $k]);

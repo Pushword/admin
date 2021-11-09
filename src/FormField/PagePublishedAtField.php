@@ -2,7 +2,6 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Version\PushwordVersionBundle;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -28,14 +27,10 @@ class PagePublishedAtField extends AbstractField
 
     private function getHelp(): string
     {
+        $published = $this->getSubject()->getpublishedAt() <= new \Datetime('now');
         // TODO: translate
         return $this->getSubject() && $this->getSubject()->getSlug() ?
-            'Dernière édition le '.$this->getSubject()->getUpdatedAt()->format('d/m à H:m')
-            .($this->getSubject()->getEditedBy() ? ' par '.$this->getSubject()->getEditedBy()->getUsername() : '')
-            .(class_exists(PushwordVersionBundle::class)
-                ? '<br><a href="'
-                .$this->admin->getRouter()->generate('pushword_version_list', ['id' => $this->getSubject()->getId()])
-                .'">Voir l\'historique</a>' : '')
+            ($published ? '<span style="color:#449d44">Publié</span>' : 'Brouillon (publication programmée)')
             : '';
     }
 
