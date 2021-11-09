@@ -35,7 +35,7 @@ final class MediaPreviewField extends AbstractField
     {
         $relatedPages = $this->getRelatedPages();
 
-        if ([] !== empty($relatedPages['content']) || $relatedPages['mainImage']->count() > 0) {
+        if ([] !== $relatedPages['content'] || $relatedPages['mainImage']->count() > 0) {
             return true;
         } else {
             return false;
