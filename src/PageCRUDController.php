@@ -19,7 +19,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
     {
         $this->container = $container;
 
-        if (! $this->container->has('parameter_bag')) {
+        if (false === $this->container->has('parameter_bag')) {
             throw new Exception('patch no longer worked');
         }
     }

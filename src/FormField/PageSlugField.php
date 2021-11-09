@@ -10,7 +10,7 @@ class PageSlugField extends AbstractField
 {
     protected function getSlugHelp()
     {
-        if (! $this->admin->hasSubject() || ! $this->admin->getSubject()->getSlug()) {
+        if ('' === $this->admin->getSubject()->getSlug()) {
             return 'admin.page.slug.help';
         }
 

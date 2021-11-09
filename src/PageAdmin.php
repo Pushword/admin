@@ -65,7 +65,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         $form->end();
 
         foreach ($fields[1] as $k => $block) {
-            if (! ($this->getSubject() && $this->getSubject()->getSlug()) && 'admin.page.revisions' == $k) {
+            if (null === $this->getSubject()->getId() && 'admin.page.revisions' == $k) {
                 continue;
             }
 
@@ -82,7 +82,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
     protected function alterNewInstance(object $object): void
     {
-        if (! $object instanceof PageInterface) {
+        if (false === $object instanceof PageInterface) {
             return;
         }
 
