@@ -16,8 +16,6 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
 {
     use AdminTrait;
 
-    private $relatedPages;
-
     private $messagePrefix = 'admin.media';
 
     protected function configureDefaultSortValues(array &$sortValues): void
