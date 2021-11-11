@@ -4,6 +4,7 @@ namespace Pushword\Admin;
 
 use Exception;
 use Psr\Container\ContainerInterface;
+use Pushword\Core\Entity\PageInterface;
 use Pushword\Core\Repository\Repository;
 use Sonata\AdminBundle\Controller\CRUDController as SonataCRUDController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -47,6 +48,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
     public function treeAction()
     {
         $pages = Repository::getPageRepository($this->getDoctrine(), $this->params->get('pw.entity_page'))
+        //$pages = $this->getDoctrine()->getRepository(PageInterface::class)
             ->getPagesWithoutParent();
 
         return $this->renderWithExtraParams('@pwAdmin/page/page_treeView.html.twig', [
