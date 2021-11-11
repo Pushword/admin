@@ -22,7 +22,7 @@ class HostField extends AbstractField
         }
 
         return $formMapper->add('host', ChoiceType::class, [
-            'choices' => array_combine($this->getHosts(), $this->getHosts()),
+            'choices' => \Safe\array_combine($this->getHosts(), $this->getHosts()),
             'required' => false,
             'label' => 'admin.page.host.label',
             'empty_data' => $this->getHosts()[0],
@@ -34,7 +34,7 @@ class HostField extends AbstractField
         return $datagridMapper->add('host', ChoiceFilter::class, [
             'field_type' => ChoiceType::class,
             'field_options' => [
-                'choices' => array_combine($this->getHosts(), $this->getHosts()),
+                'choices' => \Safe\array_combine($this->getHosts(), $this->getHosts()),
                 'multiple' => true,
             ],
             'label' => 'admin.page.host.label',
