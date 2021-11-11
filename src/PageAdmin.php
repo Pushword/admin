@@ -20,9 +20,9 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
     protected array $fields = [];
 
-    protected $perPageOptions = [16, 250, 1000];
+    protected array $perPageOptions = [16, 250, 1000];
 
-    protected $maxPerPage = 1000;
+    protected int $maxPerPage = 1000;
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {

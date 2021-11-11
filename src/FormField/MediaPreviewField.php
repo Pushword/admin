@@ -7,8 +7,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 final class MediaPreviewField extends AbstractField
 {
-    /** @var array|null */
-    private $relatedPages;
+    private ?array $relatedPages = null;
 
     public function formField(FormMapper $formMapper): FormMapper
     {

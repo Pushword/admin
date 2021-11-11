@@ -19,13 +19,9 @@ class PageParentPageField extends AbstractField
                     'label' => 'admin.page.parentPage.label',
                     'required' => false,
                 ],
-                ($this->admin->getSubject()->getId() ? ['query_builder' => function (PageRepository $er) {
-                    //$qb->andWhere('p.parentPage != :page')->setParameter('page', $this->admin->getSubject()->getId());
-
-                    return $er->createQueryBuilder('p')
-                        ->andWhere('p.id != :id')
-                        ->setParameter('id', $this->admin->getSubject()->getId());
-                }] : [])
+                ($this->admin->getSubject()->getId() ? ['query_builder' => fn (PageRepository $er) => $er->createQueryBuilder('p')
+                    ->andWhere('p.id != :id')
+                    ->setParameter('id', $this->admin->getSubject()->getId()), ] : [])
             )
         );
     }

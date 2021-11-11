@@ -18,9 +18,7 @@ class PageTranslationsField extends AbstractField
             'help_html' => true,
             'help' => 'admin.page.translations.help',
             'btn_add' => false,
-            'to_string_callback' => function ($entity) {
-                return $entity->getLocale().' ('.$entity->getSlug().')';
-            },
+            'to_string_callback' => fn ($entity) => $entity->getLocale().' ('.$entity->getSlug().')',
         ]);
     }
 }
