@@ -89,9 +89,9 @@ trait AdminTrait
         return $this;
     }
 
-    protected function addFormField(string $field, FormMapper $formMapper): void
+    protected function addFormField(string $field, FormMapper $form): void
     {
-        (new $field($this))->formField($formMapper);
+        (new $field($this))->formField($form);
     }
 
     public function getUser()
@@ -106,9 +106,9 @@ trait AdminTrait
     }
 
     /** @required */
-    public function setEntityManager(EntityManagerInterface $em): void
+    public function setEntityManager(EntityManagerInterface $entityManager): void
     {
-        $this->em = $em;
+        $this->em = $entityManager;
     }
 
     public function getEntityManager(): EntityManagerInterface
@@ -133,9 +133,9 @@ trait AdminTrait
     }
 
     /** @required */
-    public function setApps(AppPool $apps): void
+    public function setApps(AppPool $appPool): void
     {
-        $this->apps = $apps;
+        $this->apps = $appPool;
     }
 
     public function getApps(): AppPool

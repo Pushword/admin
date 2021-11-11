@@ -7,9 +7,9 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 class PageTranslationsField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('translations', ModelAutocompleteType::class, [
+        return $form->add('translations', ModelAutocompleteType::class, [
             'required' => false,
             'multiple' => true,
             'class' => $this->admin->getPageClass(),

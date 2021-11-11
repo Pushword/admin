@@ -14,5 +14,5 @@ abstract class AbstractField
         $this->admin = $admin;
     }
 
-    abstract public function formField(FormMapper $formMapper): FormMapper;
+    abstract public function formField(FormMapper $form): FormMapper;
 }

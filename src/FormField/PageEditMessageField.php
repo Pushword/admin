@@ -8,9 +8,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PageEditMessageField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('editMessage', TextareaType::class, [
+        return $form->add('editMessage', TextareaType::class, [
             'required' => false,
             'attr' => ['class' => 'autosize textarea-no-newline'],
             'label' => $this->admin->getMessagePrefix().'.editMessage.label',

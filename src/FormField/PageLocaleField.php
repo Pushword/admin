@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PageLocaleField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('locale', TextType::class, [
+        return $form->add('locale', TextType::class, [
             'label' => 'admin.page.locale.label',
             'help_html' => true,
             'help' => 'admin.page.locale.help',

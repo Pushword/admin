@@ -33,9 +33,9 @@ class PageSlugField extends AbstractField
                     }</script> <small><a href="'.$liveUrl.'"><small><i class="fa fa-link"></i></small> '.\symfony\component\string\u($url)->truncate(30, '…').'</a></small></div>';
     }
 
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('slug', TextType::class, [
+        return $form->add('slug', TextType::class, [
             'required' => false,
             'label' => 'admin.page.slug.label',
             'help_html' => true,

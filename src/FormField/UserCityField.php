@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class UserCityField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add(
+        return $form->add(
             'city',
             TextType::class,
             [

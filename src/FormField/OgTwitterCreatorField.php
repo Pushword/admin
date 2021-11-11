@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class OgTwitterCreatorField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('twitterCreator', TextType::class, [
+        return $form->add('twitterCreator', TextType::class, [
             'required' => false,
             'label' => 'admin.page.twitterCreator.label',
             'help_html' => true,

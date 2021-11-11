@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PageSearchExcreptField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('searchExcrept', TextareaType::class, [
+        return $form->add('searchExcrept', TextareaType::class, [
             'required' => false,
             'label' => 'admin.page.searchExcrept.label',
             'help_html' => true,

@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PageTitleField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('title', TextareaType::class, [
+        return $form->add('title', TextareaType::class, [
             'label' => 'admin.page.title.label',
             'required' => false,
             'help_html' => true,

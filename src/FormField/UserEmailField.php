@@ -6,9 +6,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class UserEmailField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper
+        return $form
             ->add('email', null, ['label' => 'admin.user.email.label']);
     }
 }

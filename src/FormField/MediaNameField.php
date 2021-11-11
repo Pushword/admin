@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class MediaNameField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('name', TextType::class, [
+        return $form->add('name', TextType::class, [
             'required' => $this->admin->getSubject() && $this->admin->getSubject()->getMedia() ? true : false,
             'help_html' => true,
             'help' => 'admin.media.name.help',

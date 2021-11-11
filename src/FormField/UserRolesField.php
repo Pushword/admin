@@ -8,9 +8,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserRolesField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('roles', ImmutableArrayType::class, [
+        return $form->add('roles', ImmutableArrayType::class, [
             'label' => false,
             'keys' => [
                 ['0', ChoiceType::class, [

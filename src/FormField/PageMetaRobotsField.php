@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class PageMetaRobotsField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('metaRobots', ChoiceType::class, [
+        return $form->add('metaRobots', ChoiceType::class, [
             'choices' => [
                 'admin.page.metaRobots.choice.noIndex' => 'noindex',
             ],

@@ -26,9 +26,9 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
     }
 
     /** @required */
-    public function setParams(ParameterBagInterface $params): void
+    public function setParams(ParameterBagInterface $parameterBag): void
     {
-        $this->params = $params;
+        $this->params = $parameterBag;
     }
 
     public function listAction(Request $request): Response

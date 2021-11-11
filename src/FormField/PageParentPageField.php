@@ -8,9 +8,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PageParentPageField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add(
+        return $form->add(
             'parentPage',
             EntityType::class,
             array_merge(

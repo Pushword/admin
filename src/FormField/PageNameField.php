@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PageNameField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('name', TextareaType::class, [
+        return $form->add('name', TextareaType::class, [
             'label' => 'admin.page.name.label',
             'required' => false,
             'help_html' => true,

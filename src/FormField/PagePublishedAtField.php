@@ -8,9 +8,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class PagePublishedAtField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('publishedAt', DateTimePickerType::class, [
+        return $form->add('publishedAt', DateTimePickerType::class, [
             'format' => DateTimeType::HTML5_FORMAT,
             'dp_side_by_side' => true,
             'dp_use_current' => true,

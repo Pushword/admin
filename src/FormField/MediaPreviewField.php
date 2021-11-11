@@ -9,17 +9,17 @@ final class MediaPreviewField extends AbstractField
 {
     private ?array $relatedPages = null;
 
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
         if ($this->admin->getSubject()->getMedia()) {
-            $formMapper->with('admin.media.preview.label', [
+            $form->with('admin.media.preview.label', [
                 'class' => 'col-md-12',
                 'description' => $this->showMediaPreview(),
                 'empty_message' => false,
             ])->end();
 
             if ($this->issetRelatedPages()) {
-                $formMapper->with('admin.media.related.label', [
+                $form->with('admin.media.related.label', [
                     'class' => 'col-md-12',
                     'description' => $this->showRelatedPages(),
                     'empty_message' => false,
@@ -27,7 +27,7 @@ final class MediaPreviewField extends AbstractField
             }
         }
 
-        return $formMapper;
+        return $form;
     }
 
     private function issetRelatedPages(): bool

@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class MediaSlugField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('slugForce', TextType::class, [
+        return $form->add('slugForce', TextType::class, [
             'label' => 'admin.page.slug.label',
             'help_html' => true,
             'required' => false,

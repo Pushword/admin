@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class PriorityField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add(
+        return $form->add(
             'priority',
             NumberType::class,
             [

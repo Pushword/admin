@@ -9,19 +9,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class HostField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
         if (1 === \count($this->admin->getApps()->getHosts())) {
             $this->admin->getSubject()->setHost($this->admin->getApps()->get()->getMainHost());
 
-            return $formMapper;
+            return $form;
         }
 
         if ($this->admin instanceof FormMapper && null === $this->admin->getSubject()->getHost()) {
             $this->admin->getSubject()->setHost($this->admin->getApps()->getMainHost());
         }
 
-        return $formMapper->add('host', ChoiceType::class, [
+        return $form->add('host', ChoiceType::class, [
             'choices' => \Safe\array_combine($this->getHosts(), $this->getHosts()),
             'required' => false,
             'label' => 'admin.page.host.label',
@@ -29,9 +29,9 @@ class HostField extends AbstractField
         ]);
     }
 
-    public function datagridMapper(DatagridMapper $datagridMapper): DatagridMapper
+    public function datagridMapper(DatagridMapper $datagrid): DatagridMapper
     {
-        return $datagridMapper->add('host', ChoiceFilter::class, [
+        return $datagrid->add('host', ChoiceFilter::class, [
             'field_type' => ChoiceType::class,
             'field_options' => [
                 'choices' => \Safe\array_combine($this->getHosts(), $this->getHosts()),

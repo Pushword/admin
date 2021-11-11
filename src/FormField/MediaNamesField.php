@@ -6,9 +6,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 final class MediaNamesField extends AbstractField
 {
-    public function formField(FormMapper $formMapper): FormMapper
+    public function formField(FormMapper $form): FormMapper
     {
-        return $formMapper->add('names', null, [
+        return $form->add('names', null, [
             'required' => false,
             'help_html' => true, 'help' => 'admin.media.names.help',
             'label' => 'admin.media.names.label',
