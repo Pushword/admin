@@ -8,6 +8,7 @@ use Pushword\Core\Entity\PageInterface;
 use Pushword\Core\Repository\Repository;
 use Sonata\AdminBundle\Controller\CRUDController as SonataCRUDController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,10 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
 {
     protected ParameterBagInterface $params;
 
-    /** @required */
+    /**
+     * @required
+     * https://github.com/symfony/symfony/blob/5.4/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php
+     */
     public function loadContainer(ContainerInterface $container): void
     {
         $this->container = $container;
