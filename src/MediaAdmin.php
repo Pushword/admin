@@ -69,7 +69,7 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
         ]);* */
 
         $mimeTypes = Repository::getMediaRepository($this->getEntityManager(), $this->mediaClass)->getMimeTypes();
-        if ($mimeTypes) {
+        if ([] !== $mimeTypes) {
             $filter->add('mimeType', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,
                 'field_options' => [
@@ -109,11 +109,7 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
 
     public function getObjectMetadata(object $object): Metadata
     {
-        if ($this->imageManager->isImage($object)) {
-            $thumb = $this->imageManager->getBrowserPath($object, 'thumb');
-        } else {
-            $thumb = self::$thumb;
-        }
+        $thumb = $this->imageManager->isImage($object) ? $this->imageManager->getBrowserPath($object, 'thumb') : self::$thumb;
 
         return new Metadata($object->getName(), null, $thumb);
     }

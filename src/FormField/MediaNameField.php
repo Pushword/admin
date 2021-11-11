@@ -10,7 +10,7 @@ final class MediaNameField extends AbstractField
     public function formField(FormMapper $form): FormMapper
     {
         return $form->add('name', TextType::class, [
-            'required' => $this->admin->getSubject() && $this->admin->getSubject()->getMedia() ? true : false,
+            'required' => $this->admin->getSubject() && $this->admin->getSubject()->getMedia(),
             'help_html' => true,
             'help' => 'admin.media.name.help',
             'label' => 'admin.media.name.label',

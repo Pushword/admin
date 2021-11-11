@@ -82,7 +82,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
     protected function alterNewInstance(object $object): void
     {
-        if (false === $object instanceof PageInterface) {
+        if (! $object instanceof PageInterface) {
             return;
         }
 
