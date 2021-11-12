@@ -12,6 +12,9 @@ class UserAdmin extends AbstractAdmin implements UserAdminInterface
 {
     use AdminTrait;
 
+    /**
+     * @var string
+     */
     protected $messagePrefix = 'admin.user';
 
     protected function configureDefaultSortValues(array &$sortValues): void
