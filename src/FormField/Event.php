@@ -11,6 +11,9 @@ use Symfony\Contracts\EventDispatcher\Event as SfEvent;
  */
 class Event extends SfEvent
 {
+    /**
+     * @var string
+     */
     public const NAME = 'pushword.admin.load_field';
 
     private AdminInterface $admin;

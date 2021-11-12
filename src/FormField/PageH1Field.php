@@ -7,6 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class PageH1Field extends AbstractField
 {
+    /**
+     * @var string
+     */
     public const DEFAULT_STYLE = 'font-size: 30px !important; border:0;'
             .'font-weight: 700; padding: 10px 10px 0px 10px; margin:-23px auto; max-width: 640px; color:#111827';
 

@@ -39,6 +39,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    /**
+     * @var string[]
+     */
     public const DEFAULT_APP_FALLBACK = [
         'admin_page_form_fields',
         'admin_user_form_fields',
@@ -72,6 +75,9 @@ class Configuration implements ConfigurationInterface
         ],
     ];
 
+    /**
+     * @var array<class-string<\Pushword\Admin\FormField\AbstractField>>[]
+     */
     public const DEFAULT_ADMIN_MEDIA_FORM_FIELDS = [
         [MediaMediaFileField::class, MediaNameField::class, MediaSlugField::class],
         [CustomPropertiesField::class, MediaNamesField::class],
