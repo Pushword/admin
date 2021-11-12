@@ -36,6 +36,7 @@ class UserAdmin extends AbstractAdmin implements UserAdminInterface
         foreach ($fields[0] as $field) {
             $this->addFormField($field, $form);
         }
+
         $form->end();
 
         foreach ($fields[1]  as $k => $block) {
@@ -76,6 +77,7 @@ class UserAdmin extends AbstractAdmin implements UserAdminInterface
                 ]
             );
         }
+
         if ($this->exists('lastname')) {
             $list->add(
                 'lastname',

@@ -35,12 +35,14 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
         foreach ($fields[0] as $field) {
             $this->addFormField($field, $form);
         }
+
         $form->end();
 
         $form->with('Params', ['class' => 'col-md-4']);
         foreach ($fields[1] as $field) {
             $this->addFormField($field, $form);
         }
+
         $form->end();
 
         // preview

@@ -62,6 +62,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         foreach ($fields[0] as $field) {
             $this->addFormField($field, $form);
         }
+
         $form->end();
 
         foreach ($fields[1] as $k => $block) {
@@ -124,7 +125,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         }
     }
 
-    public function preUpdate(object $object): void
+    protected function preUpdate(object $object): void
     {
         $object->setUpdatedAt(new \Datetime());
     }
