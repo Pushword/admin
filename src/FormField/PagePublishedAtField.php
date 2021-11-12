@@ -36,7 +36,7 @@ class PagePublishedAtField extends AbstractField
 
     private function getHelp(): string
     {
-        $published = $this->getSubject()->getPublishedAt() <= new \Datetime('now');
+        $published = $this->getSubject()->getPublishedAt() <= new \DateTime('now');
         // TODO: translate
         return null !== $this->getSubject()->getId() ?
             $this->trans($this->admin->getMessagePrefix().'.publishedAt.'.($published ? 'online' : 'draft'))

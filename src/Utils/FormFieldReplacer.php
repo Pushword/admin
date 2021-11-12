@@ -12,6 +12,8 @@ class FormFieldReplacer
     }
 
     /**
+     * @param mixed[] $fields
+     *
      * @return mixed[]
      */
     public function run(string $formFieldClass, string $newFormFieldClass, array $fields): array
@@ -29,19 +31,6 @@ class FormFieldReplacer
 
                 break;
             }
-        }
-
-        return $fields;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function run2(string $formFieldClass, string $newFormFieldClass, $fields): array
-    {
-        $key = array_search($formFieldClass, $fields[0]);
-        if (false !== $key) {
-            $fields[0][$key] = $newFormFieldClass;
         }
 
         return $fields;

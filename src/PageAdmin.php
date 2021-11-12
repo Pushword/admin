@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin;
 
+use LogicException;
 use Pushword\Admin\FormField\HostField;
 use Pushword\Core\Entity\PageInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -15,6 +16,7 @@ use Sonata\AdminBundle\Object\Metadata;
  */
 class PageAdmin extends AbstractAdmin implements PageAdminInterface
 {
+    /* @use AdminTrait<PageInterface> */
     use AdminTrait;
 
     /**
@@ -72,7 +74,9 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
     protected function configureFormFields(FormMapper $form): void
     {
         $fields = $this->getFormFields();
-
+        if (! isset($fields[0]) || ! \is_array($fields[0]) || ! isset($fields[1]) || ! \is_array($fields[1])) {
+            throw new LogicException();
+        }
         $form->with('admin.page.mainContent.label', ['class' => 'col-md-9 mainFields']);
         foreach ($fields[0] as $field) {
             $this->addFormField($field, $form);
@@ -98,10 +102,6 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
     protected function alterNewInstance(object $object): void
     {
-        if (! $object instanceof PageInterface) {
-            return;
-        }
-
         $object->setLocale($this->apps->get()->getDefaultLocale()); // always use first app params...
     }
 
@@ -114,7 +114,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
         if (\count($this->getApps()->getHosts()) > 1) {
             //$filter->add('host', null, ['label' => 'admin.page.host.label']);
-            (new HostField($this))->datagridMapper($filter);
+            (new HostField($this))->datagridMapper($filter); // @phpstan-ignore-line
         }
 
         $filter->add('h1', null, ['label' => 'admin.page.h1.label']);
@@ -145,7 +145,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
     protected function preUpdate(object $object): void
     {
-        $object->setUpdatedAt(new \Datetime());
+        $object->setUpdatedAt(new \DateTime());
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -170,10 +170,14 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         ]);
     }
 
+    /**
+     * @param PageInterface $object
+     * @psalm-suppress MoreSpecificImplementedParamType
+     */
     public function getObjectMetadata(object $object): Metadata
     {
         $media = $object->getMainImage();
-        if ($media && $this->imageManager->isImage($media)) {
+        if (null !== $media && $this->imageManager->isImage($media)) {
             $thumb = $this->imageManager->getBrowserPath($media, 'thumb');
         } else {
             $thumb = self::$thumb;
@@ -181,6 +185,6 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
 
         $name = \in_array($object->getName(), ['', null], true) ? $object->getH1() : $object->getName();
 
-        return new Metadata(strip_tags($name), null, $thumb);
+        return new Metadata(strip_tags((string) $name), null, $thumb);
     }
 }

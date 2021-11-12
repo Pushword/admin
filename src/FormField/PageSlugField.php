@@ -21,7 +21,7 @@ class PageSlugField extends AbstractField
         $page = $this->admin->getSubject();
 
         $url = $this->admin->getRouter()->generate('pushword_page', ['slug' => $page->getRealSlug()]);
-        $liveUrl = $page->getHost() ?
+        $liveUrl = '' !== $page->getHost() ?
             $this->admin->getRouter()->generate(
                 'custom_host_pushword_page',
                 ['host' => $page->getHost(), 'slug' => $page->getRealSlug()]
@@ -33,7 +33,7 @@ class PageSlugField extends AbstractField
                         $(".slug_disabled").first().removeAttr("disabled");
                         $(".slug_disabled").first().focus();
                         $("#disabledLinkSlug").first().remove();
-                    }</script> <small><a href="'.$liveUrl.'"><small><i class="fa fa-link"></i></small> '.\symfony\component\string\u($url)->truncate(30, '…').'</a></small></div>';
+                    }</script> <small><a href="'.$liveUrl.'"><small><i class="fa fa-link"></i></small> '.\Symfony\Component\String\u($url)->truncate(30, '…').'</a></small></div>';
     }
 
     /**
@@ -50,7 +50,7 @@ class PageSlugField extends AbstractField
             'help' => $this->getSlugHelp(),
             'attr' => [
                 'class' => 'slug_disabled',
-                ($this->admin->getSubject() ? ($this->admin->getSubject()->getSlug() ? 'disabled' : 't') : 't') => '',
+                ('' !== $this->admin->getSubject()->getSlug() ? 'disabled' : 't') => '',
             ],
         ]);
     }

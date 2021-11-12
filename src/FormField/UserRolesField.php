@@ -25,7 +25,7 @@ class UserRolesField extends AbstractField
                 ['0', ChoiceType::class, [
                     'required' => false,
                     'label' => 'admin.user.role.label',
-                    'choices' => \in_array('ROLE_SUPER_ADMIN', $this->admin->getUser()->getRoles()) ? [
+                    'choices' => \in_array('ROLE_SUPER_ADMIN', $this->admin->getUser()->getRoles(), true) ? [
                         'admin.user.role.super_admin' => 'ROLE_SUPER_ADMIN',
                         'admin.user.role.admin' => 'ROLE_ADMIN',
                         'admin.user.role.editor' => 'ROLE_EDITOR',

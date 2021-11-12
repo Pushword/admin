@@ -11,6 +11,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @extends SonataCRUDController<PageInterface>
+ */
 class PageCRUDController extends SonataCRUDController implements PageCRUDControllerInterface
 {
     protected ParameterBagInterface $params;
@@ -37,7 +40,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
     public function listAction(Request $request): Response
     {
         if (($listMode = $request->get('_list_mode')) !== null) {
-            $this->admin->setListMode($listMode);
+            $this->admin->setListMode(\strval($listMode));
         }
 
         $listMode = $this->admin->getListMode();
@@ -50,7 +53,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
 
     public function treeAction(): Response
     {
-        $pages = Repository::getPageRepository($this->getDoctrine(), $this->params->get('pw.entity_page'))
+        $pages = Repository::getPageRepository($this->getDoctrine(), $this->params->get('pw.entity_page')) // @phpstan-ignore-line
         //$pages = $this->getDoctrine()->getRepository(PageInterface::class)
             ->getPagesWithoutParent();
 
