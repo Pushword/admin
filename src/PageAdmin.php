@@ -16,7 +16,9 @@ use Sonata\AdminBundle\Object\Metadata;
  */
 class PageAdmin extends AbstractAdmin implements PageAdminInterface
 {
-    /* @use AdminTrait<PageInterface> */
+    /**
+     * @use AdminTrait<PageInterface>
+     */
     use AdminTrait;
 
     /**

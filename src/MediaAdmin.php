@@ -19,7 +19,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
 {
-    /* @use AdminTrait<MediaInterface> */
+    /**
+     * @use AdminTrait<MediaInterface>
+     */
     use AdminTrait;
 
     private string $messagePrefix = 'admin.media';
