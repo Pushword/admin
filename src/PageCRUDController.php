@@ -48,7 +48,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
         return parent::listAction($request);
     }
 
-    public function treeAction()
+    public function treeAction(): Response
     {
         $pages = Repository::getPageRepository($this->getDoctrine(), $this->params->get('pw.entity_page'))
         //$pages = $this->getDoctrine()->getRepository(PageInterface::class)

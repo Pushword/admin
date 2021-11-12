@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin\FormField;
 
+use Pushword\Core\Entity\PageInterface;
 use Pushword\Version\PushwordVersionBundle;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,18 +25,18 @@ class PageEditMessageField extends AbstractField
         $editMessage = $this->getSubject()->getEditMessage();
         $this->getSubject()->setEditMessage('');
 
-        return $this->getSubject() && $this->getSubject()->getSlug() ?
+        return null !== $this->getSubject()->getId() ?
             $this->admin->getTranslator()->trans($this->admin->getMessagePrefix().'.editMessage.help'.(class_exists(PushwordVersionBundle::class) ? 'Versionned' : ''), [
                 '%lastEditDatetime%' => $this->getSubject()->getUpdatedAt()->format($this->admin->getTranslator()->trans('datetimeMediumFormat')),
-                '%lastEditMessage%' => $editMessage ? '«&nbsp;'.$editMessage.'&nbsp;»' : '-',
+                '%lastEditMessage%' => '' !== $editMessage ? '«&nbsp;'.$editMessage.'&nbsp;»' : '-',
                 '%seeVersionLink%' => class_exists(PushwordVersionBundle::class)
                     ? $this->admin->getRouter()->generate('pushword_version_list', ['id' => $this->getSubject()->getId()])
                     : '',
             ]) : '';
     }
 
-    private function getSubject()
+    private function getSubject(): PageInterface
     {
-        return $this->admin->getSubject();
+        return $this->admin->getSubject(); // @phpstan-ignore-line
     }
 }

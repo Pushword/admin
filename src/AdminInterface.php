@@ -9,6 +9,10 @@ use Sonata\AdminBundle\Admin\AdminInterface as AdminAdminInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment as Twig;
 
+/**
+ * @template T of object
+ * @extends AdminAdminInterface<T>
+ */
 interface AdminInterface extends AdminAdminInterface
 {
     public function getRouter(): RouterInterface;

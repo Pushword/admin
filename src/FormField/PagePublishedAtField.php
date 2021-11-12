@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin\FormField;
 
+use Pushword\Core\Entity\PageInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -27,15 +28,20 @@ class PagePublishedAtField extends AbstractField
 
     private function getHelp(): string
     {
-        $published = $this->getSubject()->getpublishedAt() <= new \Datetime('now');
+        $published = $this->getSubject()->getPublishedAt() <= new \Datetime('now');
         // TODO: translate
-        return $this->getSubject() && $this->getSubject()->getSlug() ?
-            ($published ? '<span style="color:#449d44">Publié</span>' : 'Brouillon (publication programmée)')
+        return null !== $this->getSubject()->getId() ?
+            $this->trans($this->admin->getMessagePrefix().'.publishedAt.'.($published ? 'online' : 'draft'))
             : '';
     }
 
-    private function getSubject()
+    private function getSubject(): PageInterface
     {
         return $this->admin->getSubject();
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->admin->getTranslator()->trans($id);
     }
 }

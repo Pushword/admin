@@ -104,6 +104,8 @@ admin:
       label: Parent Page
     publishedAt:
       label: Published at
+      online: Online
+      draft: Draft
     editMessage:
       label: Reason of modification
       help:           Previous edit on %lastEditDatetime% <br> <em>%lastEditMessage%</em>

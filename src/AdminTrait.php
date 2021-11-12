@@ -190,6 +190,11 @@ trait AdminTrait
         return $this->imageManager;
     }
 
+    /**
+     * @psalm-suppress InvalidArgument
+     *
+     * @return array<mixed>
+     */
     protected function getFormFields(string $key = 'admin_page_form_fields'): array
     {
         $fields = $this->apps->get()->get($key);

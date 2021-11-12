@@ -2,21 +2,25 @@
 
 namespace Pushword\Admin;
 
+use Pushword\Core\Entity\MediaInterface;
 use Pushword\Core\Repository\Repository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Object\Metadata; //use Sonata\BlockBundle\Meta\Metadata;
+use Sonata\AdminBundle\Form\FormMapper; //use Sonata\BlockBundle\Meta\Metadata;
+use Sonata\AdminBundle\Object\Metadata;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @extends AbstractAdmin<MediaInterface>
+ */
 final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
 {
     use AdminTrait;
 
-    private $messagePrefix = 'admin.media';
+    private string $messagePrefix = 'admin.media';
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {
@@ -27,6 +31,9 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
         ];
     }
 
+    /**
+     * @psalm-suppress InvalidArgument
+     */
     protected function configureFormFields(FormMapper $form): void
     {
         $fields = $this->getFormFields('admin_media_form_fields');

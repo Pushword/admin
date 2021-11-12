@@ -107,6 +107,8 @@ admin:
       label: Page Parente
     publishedAt:
       label: Publié le
+      online: <span style="color:#449d44">Publié</span>
+      draft: Brouillon
     editMessage:
       label: Motif d'édition
       help:           Précédente modification le %lastEditDatetime% <br> <em>%lastEditMessage%</em>

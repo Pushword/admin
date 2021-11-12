@@ -10,16 +10,28 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Object\Metadata;
 
+/**
+ * @extends AbstractAdmin<PageInterface>
+ */
 class PageAdmin extends AbstractAdmin implements PageAdminInterface
 {
     use AdminTrait;
 
+    /**
+     * @var bool
+     */
     public $supportsPreviewMode = true;
 
-    protected $messagePrefix = 'admin.page';
+    protected string $messagePrefix = 'admin.page';
 
+    /**
+     * @var string[]
+     */
     protected array $fields = [];
 
+    /**
+     * @var int[]
+     */
     protected array $perPageOptions = [16, 250, 1000];
 
     protected int $maxPerPage = 1000;
@@ -54,6 +66,9 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         return method_exists($this->pageClass, 'get'.$name);
     }
 
+    /**
+     * @psalm-suppress InvalidArgument
+     */
     protected function configureFormFields(FormMapper $form): void
     {
         $fields = $this->getFormFields();
@@ -90,6 +105,9 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         $object->setLocale($this->apps->get()->getDefaultLocale()); // always use first app params...
     }
 
+    /**
+     * @psalm-suppress InvalidArgument
+     */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add('locale', null, ['label' => 'admin.page.locale.label']);
@@ -161,6 +179,8 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
             $thumb = self::$thumb;
         }
 
-        return new Metadata(strip_tags($object->getName(true)), null, $thumb);
+        $name = \in_array($object->getName(), ['', null], true) ? $object->getH1() : $object->getName();
+
+        return new Metadata(strip_tags($name), null, $thumb);
     }
 }
