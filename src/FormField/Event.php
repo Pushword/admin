@@ -20,6 +20,9 @@ class Event extends SfEvent
 
     private array $fields;
 
+    /**
+     * @param mixed[] $fields
+     */
     public function __construct(AdminInterface $admin, array $fields)
     {
         $this->admin = $admin;
@@ -39,6 +42,9 @@ class Event extends SfEvent
         return $this->fields;
     }
 
+    /**
+     * @param mixed[] $fields
+     */
     public function setFields(array $fields): self
     {
         $this->fields = $fields;
