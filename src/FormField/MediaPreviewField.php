@@ -2,16 +2,28 @@
 
 namespace Pushword\Admin\FormField;
 
+use Pushword\Core\Entity\MediaInterface;
 use Pushword\Core\Repository\Repository;
 use Sonata\AdminBundle\Form\FormMapper;
 
+/**
+ * @extends AbstractField<MediaInterface>
+ */
 final class MediaPreviewField extends AbstractField
 {
+    /**
+     * @var array<string, mixed>
+     */
     private ?array $relatedPages = null;
 
+    /**
+     * @param FormMapper<MediaInterface> $form
+     *
+     * @return FormMapper<MediaInterface>
+     */
     public function formField(FormMapper $form): FormMapper
     {
-        if ($this->admin->getSubject()->getMedia()) {
+        if (null !== $this->admin->getSubject()->getMedia()) {
             $form->with('admin.media.preview.label', [
                 'class' => 'col-md-12',
                 'description' => $this->showMediaPreview(),
@@ -34,11 +46,7 @@ final class MediaPreviewField extends AbstractField
     {
         $relatedPages = $this->getRelatedPages();
 
-        if ([] !== $relatedPages['content'] || $relatedPages['mainImage']->count() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return [] !== $relatedPages['content'] || $relatedPages['mainImage']->count() > 0; // @phpstan-ignore-line
     }
 
     /**
@@ -53,7 +61,7 @@ final class MediaPreviewField extends AbstractField
         $media = $this->admin->getSubject();
 
         $pages = Repository::getPageRepository($this->admin->getEntityManager(), $this->admin->getPageClass())
-            ->getPagesUsingMedia($media->getMedia()); //$this->imageManager->getBrowserPath($media));
+            ->getPagesUsingMedia((string) $media->getMedia());
 
         $this->relatedPages = [
             'content' => $pages,

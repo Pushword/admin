@@ -23,7 +23,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
     {
         $this->container = $container;
 
-        if (! $this->container->has('parameter_bag')) {
+        if (! $this->container->has('parameter_bag')) { // @phpstan-ignore-line
             throw new Exception('patch no longer worked');
         }
     }
@@ -36,7 +36,7 @@ class PageCRUDController extends SonataCRUDController implements PageCRUDControl
 
     public function listAction(Request $request): Response
     {
-        if ($listMode = $request->get('_list_mode')) {
+        if (($listMode = $request->get('_list_mode')) !== null) {
             $this->admin->setListMode($listMode);
         }
 

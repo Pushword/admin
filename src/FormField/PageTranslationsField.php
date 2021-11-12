@@ -6,8 +6,16 @@ use Pushword\Core\Entity\PageInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
+/**
+ * @extends AbstractField<PageInterface>
+ */
 class PageTranslationsField extends AbstractField
 {
+    /**
+     * @param FormMapper<PageInterface> $form
+     *
+     * @return FormMapper<PageInterface>
+     */
     public function formField(FormMapper $form): FormMapper
     {
         return $form->add('translations', ModelAutocompleteType::class, [

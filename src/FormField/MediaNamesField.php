@@ -2,10 +2,19 @@
 
 namespace Pushword\Admin\FormField;
 
+use Pushword\Core\Entity\MediaInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 
+/**
+ * @extends AbstractField<MediaInterface>
+ */
 final class MediaNamesField extends AbstractField
 {
+    /**
+     * @param FormMapper<MediaInterface> $form
+     *
+     * @return FormMapper<MediaInterface>
+     */
     public function formField(FormMapper $form): FormMapper
     {
         return $form->add('names', null, [

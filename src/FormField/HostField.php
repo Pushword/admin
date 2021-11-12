@@ -2,13 +2,22 @@
 
 namespace Pushword\Admin\FormField;
 
+use Pushword\Core\Entity\SharedTrait\HostInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @extends AbstractField<HostInterface>
+ */
 class HostField extends AbstractField
 {
+    /**
+     * @param FormMapper<HostInterface> $form
+     *
+     * @return FormMapper<HostInterface>
+     */
     public function formField(FormMapper $form): FormMapper
     {
         if (1 === \count($this->admin->getApps()->getHosts())) {
@@ -17,7 +26,7 @@ class HostField extends AbstractField
             return $form;
         }
 
-        if ($this->admin instanceof FormMapper && null === $this->admin->getSubject()->getHost()) {
+        if ('' === $this->admin->getSubject()->getHost()) {
             $this->admin->getSubject()->setHost($this->admin->getApps()->getMainHost());
         }
 
@@ -29,6 +38,11 @@ class HostField extends AbstractField
         ]);
     }
 
+    /**
+     * @param DatagridMapper<HostInterface> $datagrid
+     *
+     * @return DatagridMapper<HostInterface>
+     */
     public function datagridMapper(DatagridMapper $datagrid): DatagridMapper
     {
         return $datagrid->add('host', ChoiceFilter::class, [

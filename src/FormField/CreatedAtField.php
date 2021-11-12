@@ -6,8 +6,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
+/**
+ * @template T of object
+ * @extends AbstractField<T>
+ */
 class CreatedAtField extends AbstractField
 {
+    /**
+     * @param FormMapper<T> $form
+     *
+     * @return FormMapper<T>
+     */
     public function formField(FormMapper $form): FormMapper
     {
         return $form->add('createdAt', DateTimePickerType::class, [

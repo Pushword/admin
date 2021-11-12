@@ -2,11 +2,20 @@
 
 namespace Pushword\Admin\FormField;
 
+use Pushword\Core\Entity\UserInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DatePickerType;
 
+/**
+ * @extends AbstractField<UserInterface>
+ */
 class UserDateOfBirthField extends AbstractField
 {
+    /**
+     * @param FormMapper<UserInterface> $form
+     *
+     * @return FormMapper<UserInterface>
+     */
     public function formField(FormMapper $form): FormMapper
     {
         $dateTime = new \DateTime();

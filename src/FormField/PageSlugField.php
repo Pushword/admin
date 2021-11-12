@@ -6,6 +6,9 @@ use Pushword\Core\Entity\PageInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @extends AbstractField<PageInterface>
+ */
 class PageSlugField extends AbstractField
 {
     protected function getSlugHelp(): string
@@ -33,6 +36,11 @@ class PageSlugField extends AbstractField
                     }</script> <small><a href="'.$liveUrl.'"><small><i class="fa fa-link"></i></small> '.\symfony\component\string\u($url)->truncate(30, '…').'</a></small></div>';
     }
 
+    /**
+     * @param FormMapper<PageInterface> $form
+     *
+     * @return FormMapper<PageInterface>
+     */
     public function formField(FormMapper $form): FormMapper
     {
         return $form->add('slug', TextType::class, [

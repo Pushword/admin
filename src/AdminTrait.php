@@ -3,8 +3,13 @@
 namespace Pushword\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
+use Pushword\Admin\FormField\AbstractField;
 use Pushword\Admin\FormField\Event as FormEvent;
 use Pushword\Core\Component\App\AppPool;
+use Pushword\Core\Entity\MediaInterface;
+use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\UserInterface;
 use Pushword\Core\Service\ImageManager;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,14 +18,23 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment as Twig;
 
+/**
+ * @template T of object
+ */
 trait AdminTrait
 {
     protected AppPool $apps;
 
     private ImageManager $imageManager;
 
+    /**
+     * @var class-string<PageInterface>
+     */
     protected string $pageClass;
 
+    /**
+     * @var class-string<MediaInterface>
+     */
     protected string $mediaClass;
 
     protected string $userClass;
@@ -83,7 +97,7 @@ trait AdminTrait
      * */
     protected function setMosaicDefaultListMode(): self
     {
-        if ($mode = (string) $this->getRequest()->query->get('_list_mode')) {
+        if (($mode = (string) $this->getRequest()->query->get('_list_mode')) !== '') {
             $this->setListMode($mode);
         } else {
             $this->setListMode('mosaic');
@@ -92,14 +106,22 @@ trait AdminTrait
         return $this;
     }
 
+    /**
+     * @param class-string<AbstractField<T>> $field
+     * @param FormMapper<T>                  $form
+     */
     protected function addFormField(string $field, FormMapper $form): void
     {
         (new $field($this))->formField($form);
     }
 
-    public function getUser()
+    public function getUser(): UserInterface
     {
-        return $this->securityTokenStorage->getToken()->getUser();
+        if (null === $this->securityTokenStorage->getToken() || ! ($user = $this->securityTokenStorage->getToken()->getUser()) instanceof UserInterface) {
+            throw new LogicException();
+        }
+
+        return $user;
     }
 
     /** @required */
@@ -130,6 +152,9 @@ trait AdminTrait
         return $this->twig;
     }
 
+    /**
+     * @param class-string<PageInterface> $pageClass
+     */
     public function setPageClass($pageClass): void
     {
         $this->pageClass = $pageClass;
@@ -146,11 +171,17 @@ trait AdminTrait
         return $this->apps;
     }
 
+    /**
+     * @param class-string<MediaInterface> $mediaClass
+     */
     public function setMediaClass($mediaClass): void
     {
         $this->mediaClass = $mediaClass;
     }
 
+    /**
+     * @param class-string<UserInterface> $userClass
+     */
     public function setUserClass($userClass): void
     {
         $this->userClass = $userClass;
@@ -167,11 +198,17 @@ trait AdminTrait
         return $this->router;
     }
 
+    /**
+     * @return class-string<MediaInterface>
+     */
     public function getMediaClass(): string
     {
         return $this->mediaClass;
     }
 
+    /**
+     * @return class-string<PageInterface>
+     */
     public function getPageClass(): string
     {
         return $this->pageClass;
@@ -183,7 +220,7 @@ trait AdminTrait
     }
 
     /** @required */
-    public function setImageManager(ImageManager $imageManager)
+    public function setImageManager(ImageManager $imageManager): void
     {
         $this->imageManager = $imageManager;
     }
@@ -201,6 +238,10 @@ trait AdminTrait
     protected function getFormFields(string $key = 'admin_page_form_fields'): array
     {
         $fields = $this->apps->get()->get($key);
+
+        if (! \is_array($fields)) {
+            throw new LogicException();
+        }
 
         $event = new FormEvent($this, $fields);
         $this->eventDispatcher->dispatch($event, FormEvent::NAME);

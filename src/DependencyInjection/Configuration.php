@@ -37,6 +37,9 @@ use Pushword\Admin\FormField\UserUsernameField;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * @template T of object
+ */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -75,9 +78,7 @@ class Configuration implements ConfigurationInterface
         ],
     ];
 
-    /**
-     * @var array<class-string<\Pushword\Admin\FormField\AbstractField>>[]
-     */
+    /** @noRector */
     public const DEFAULT_ADMIN_MEDIA_FORM_FIELDS = [
         [MediaMediaFileField::class, MediaNameField::class, MediaSlugField::class],
         [CustomPropertiesField::class, MediaNamesField::class],

@@ -8,6 +8,8 @@ use Symfony\Contracts\EventDispatcher\Event as SfEvent;
 /**
  * The order.placed event is dispatched each time an order is created
  * in the system.
+ *
+ * @template T of object
  */
 class Event extends SfEvent
 {
@@ -16,12 +18,19 @@ class Event extends SfEvent
      */
     public const NAME = 'pushword.admin.load_field';
 
+    /**
+     * @var AdminInterface<T>
+     */
     private AdminInterface $admin;
 
+    /**
+     * @var mixed[]
+     */
     private array $fields;
 
     /**
-     * @param mixed[] $fields
+     * @param AdminInterface<T> $admin
+     * @param mixed[]           $fields
      */
     public function __construct(AdminInterface $admin, array $fields)
     {
@@ -29,6 +38,9 @@ class Event extends SfEvent
         $this->fields = $fields;
     }
 
+    /**
+     * @return AdminInterface<T>
+     */
     public function getAdmin(): AdminInterface
     {
         return $this->admin;
@@ -44,6 +56,8 @@ class Event extends SfEvent
 
     /**
      * @param mixed[] $fields
+     *
+     * @return self<T>
      */
     public function setFields(array $fields): self
     {
