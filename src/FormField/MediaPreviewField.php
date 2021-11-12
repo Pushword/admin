@@ -41,6 +41,9 @@ final class MediaPreviewField extends AbstractField
         }
     }
 
+    /**
+     * @return mixed[]|array<string, mixed>
+     */
     private function getRelatedPages(): array
     {
         if (null !== $this->relatedPages) {

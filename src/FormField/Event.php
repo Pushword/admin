@@ -31,6 +31,9 @@ class Event extends SfEvent
         return $this->admin;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getFields(): array
     {
         return $this->fields;

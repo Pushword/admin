@@ -41,6 +41,9 @@ class HostField extends AbstractField
         ]);
     }
 
+    /**
+     * @return string[]
+     */
     private function getHosts(): array
     {
         return $this->admin->getApps()->getHosts();

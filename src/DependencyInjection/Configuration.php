@@ -84,6 +84,9 @@ class Configuration implements ConfigurationInterface
         [MediaPreviewField::class],
     ];
 
+    /**
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder
+     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('pushword_admin');

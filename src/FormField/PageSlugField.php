@@ -8,6 +8,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class PageSlugField extends AbstractField
 {
+    /**
+     * @return string
+     */
     protected function getSlugHelp()
     {
         if ('' === $this->admin->getSubject()->getSlug()) {
