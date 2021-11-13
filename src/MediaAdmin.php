@@ -44,6 +44,7 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
         if (! isset($fields[0]) || ! \is_array($fields[0]) || ! isset($fields[1]) || ! \is_array($fields[1]) || ! isset($fields[2]) || ! \is_array($fields[2])) {
             throw new LogicException();
         }
+
         $form->with('Media', ['class' => 'col-md-8']);
         foreach ($fields[0] as $field) {
             $this->addFormField($field, $form);

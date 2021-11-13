@@ -79,6 +79,7 @@ class PageAdmin extends AbstractAdmin implements PageAdminInterface
         if (! isset($fields[0]) || ! \is_array($fields[0]) || ! isset($fields[1]) || ! \is_array($fields[1])) {
             throw new LogicException();
         }
+
         $form->with('admin.page.mainContent.label', ['class' => 'col-md-9 mainFields']);
         foreach ($fields[0] as $field) {
             $this->addFormField($field, $form);
