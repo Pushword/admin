@@ -34,14 +34,14 @@ class HostField extends AbstractField
             'choices' => \Safe\array_combine($this->getHosts(), $this->getHosts()),
             'required' => false,
             'label' => 'admin.page.host.label',
-            'empty_data' => $this->getDefaultHost(),
+            'empty_data' => $this->getDefaultHost(), // not working
         ]);
     }
 
-    private function getDefaultHost()
+    private function getDefaultHost(): string
     {
         if ($this->admin->hasRequest() && ($host = $this->admin->getRequest()->query->get('host')) !== null) {
-            $this->admin->getApps()->switchCurrentApp($host);
+            $this->admin->getApps()->switchCurrentApp($host); // todo move it before fields initializations
 
             return $host;
         }
