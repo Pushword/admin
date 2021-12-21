@@ -67,7 +67,8 @@ final class PageMenuProvider implements ContainerAwareInterface
 
     private function isEditing(string $host): bool
     {
-        if ($this->requestStack->hasRequest() && ($filter = $this->requestStack->getCurrentRequest()->query->get('filter')) !== null) {
+        if (($request = $this->requestStack->getCurrentRequest()) !== null
+        && ($filter = $request->query->get('filter')) !== null) {
             return $filter['host']['value'][0] === $host;
         }
 
