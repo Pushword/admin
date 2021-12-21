@@ -34,8 +34,19 @@ class HostField extends AbstractField
             'choices' => \Safe\array_combine($this->getHosts(), $this->getHosts()),
             'required' => false,
             'label' => 'admin.page.host.label',
-            'empty_data' => $this->getHosts()[0],
+            'empty_data' => $this->getDefaultHost(),
         ]);
+    }
+
+    private function getDefaultHost()
+    {
+        if ($this->admin->hasRequest() && ($host = $this->admin->getRequest()->query->get('host')) !== null) {
+            $this->admin->getApps()->switchCurrentApp($host);
+
+            return $host;
+        }
+
+        return $this->getHosts()[0];
     }
 
     /**
