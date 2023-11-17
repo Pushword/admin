@@ -11,12 +11,21 @@ use Sonata\AdminBundle\Form\FormMapper; // use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\AdminBundle\Object\Metadata;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @extends AbstractAdmin<MediaInterface>
+ *
+ * @implements AdminInterface<MediaInterface>
  */
-final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
+#[AutoconfigureTag('sonata.admin', [
+    'model_class' => '%pw.entity_media%',
+    'manager_type' => 'orm',
+    'label' => 'admin.label.media',
+    'persist_filters' => true,
+])]
+final class MediaAdmin extends AbstractAdmin implements AdminInterface
 {
     /**
      * @use AdminTrait<MediaInterface>
@@ -24,6 +33,12 @@ final class MediaAdmin extends AbstractAdmin implements MediaAdminInterface
     use AdminTrait;
 
     private string $messagePrefix = 'admin.media';
+
+    protected function configure(): void
+    {
+        $this->setTemplate('list', '@pwAdmin/CRUD/mosaic.html.twig');
+        $this->setTemplate('short_object_description', '@pwAdmin/media/short_object_description.html.twig');
+    }
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {
