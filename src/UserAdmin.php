@@ -2,7 +2,7 @@
 
 namespace Pushword\Admin;
 
-use Pushword\Core\Entity\UserInterface;
+use Pushword\Core\Entity\User;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,9 +11,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * @extends AbstractAdmin<UserInterface>
+ * @extends AbstractAdmin<User>
  *
- * @implements AdminInterface<UserInterface>
+ * @implements AdminInterface<User>
  */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_user%',
@@ -29,6 +29,16 @@ class UserAdmin extends AbstractAdmin implements AdminInterface
     ) {
         $this->adminFormFieldManager->setMessagePrefix(self::MESSAGE_PREFIX);
         parent::__construct();
+    }
+
+    protected function generateBaseRouteName(bool $isChildAdmin = false): string
+    {
+        return 'admin_user';
+    }
+
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'user';
     }
 
     protected function configureDefaultSortValues(array &$sortValues): void

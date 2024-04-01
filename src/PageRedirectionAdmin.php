@@ -35,10 +35,12 @@ class PageRedirectionAdmin extends PageAbstractAdmin
         return 'app/redirection';
     }
 
+    /** @psalm-suppress MoreSpecificReturnType */
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
         $query = AbstractAdmin::configureQuery($query);
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         $qb = $this->getQueryBuilderFrom($query);
 
         $rootAlias = current($qb->getRootAliases());
@@ -48,6 +50,7 @@ class PageRedirectionAdmin extends PageAbstractAdmin
         );
         $qb->setParameter('mcf', 'Location:%');
 
+        /** @psalm-suppress LessSpecificReturnStatement */
         return $query;
     }
 

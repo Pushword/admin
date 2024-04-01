@@ -4,8 +4,7 @@ namespace Pushword\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Pushword\Admin\Utils\Thumb;
-use Pushword\Core\Entity\MediaInterface;
-use Pushword\Core\Repository\Repository;
+use Pushword\Core\Entity\Media;
 use Pushword\Core\Service\ImageManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -17,9 +16,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * @extends AbstractAdmin<MediaInterface>
+ * @extends AbstractAdmin<Media>
  *
- * @implements AdminInterface<MediaInterface>
+ * @implements AdminInterface<Media>
  */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_media%',
@@ -37,6 +36,16 @@ final class MediaAdmin extends AbstractAdmin implements AdminInterface
         private readonly ImageManager $imageManager,
     ) {
         parent::__construct();
+    }
+
+    protected function generateBaseRouteName(bool $isChildAdmin = false): string
+    {
+        return 'admin_media';
+    }
+
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'media';
     }
 
     protected function configure(): void
@@ -98,13 +107,12 @@ final class MediaAdmin extends AbstractAdmin implements AdminInterface
         $filter->add('mimeType', ModelAutocompleteFilter::class, [
             'field_options' => [
                 'property' => 'mimeType',
-                'class' => $this->mediaClass,
                 'multiple' => true
         ],
             'label' => 'admin.media.filetype.label',
         ]);* */
 
-        $mimeTypes = Repository::getMediaRepository($this->entityManager, $this->getModelClass())->getMimeTypes();
+        $mimeTypes = $this->entityManager->getRepository(Media::class)->getMimeTypes();
         if ([] !== $mimeTypes) {
             $filter->add('mimeType', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,

@@ -4,11 +4,10 @@ namespace Pushword\Admin\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Pushword\Admin\PageCheatSheetAdmin;
-use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\Page;
 use Pushword\Core\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -18,7 +17,6 @@ class PageCheatSheetController extends AbstractController
 {
     public function __construct(
         private readonly PageRepository $pageRepo,
-        private readonly ParameterBagInterface $parameterBag,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
     ) {
@@ -28,9 +26,7 @@ class PageCheatSheetController extends AbstractController
     public function cheatsheet(): Response
     {
         if (null === ($page = $this->pageRepo->findOneBy(['slug' => PageCheatSheetAdmin::CHEATSHEET_SLUG]))) {
-            $pageClass = $this->parameterBag->get('pw.entity_page');
-            /** @var PageInterface $page */
-            $page = (new $pageClass());
+            $page = (new Page());
             $page->setSlug(PageCheatSheetAdmin::CHEATSHEET_SLUG);
             $page->setH1($this->translator->trans('admin.label.cheatsheet'));
             $this->entityManager->persist($page);

@@ -20,5 +20,5 @@
         {% do item.setAttribute('class', (item.getAttribute('class') ~ ' active')) %}
     {% endif %}
 
-    {{ parent()|preg_replace('@treeview(.*/admin/app/page/list)@', '$1')|raw }}
+    {{ parent()|preg_replace('@treeview(.*/admin/page/list)@', '$1')|raw }}
 {% endblock %}

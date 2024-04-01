@@ -2,16 +2,16 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\UserInterface;
+use Pushword\Core\Entity\User;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * @extends AbstractField<UserInterface>
+ * @extends AbstractField<User>
  */
 class UserUsernameField extends AbstractField
 {
     /**
-     * @param FormMapper<UserInterface> $form
+     * @param FormMapper<User> $form
      */
     public function formField(FormMapper $form): void
     {

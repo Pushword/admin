@@ -27,12 +27,12 @@ class AdminTest extends AbstractAdminTestClass
 
         foreach ($admins as $admin) {
             foreach ($actions as $action) {
-                $client->request('GET', '/admin/app/'.$admin.'/'.$action);
+                $client->request('GET', '/admin/'.$admin.'/'.$action);
                 $this->assertResponseIsSuccessful();
             }
         }
 
-        $client->request('GET', '/admin/app/page/2/edit');
+        $client->request('GET', '/admin/page/2/edit');
         $this->assertResponseIsSuccessful();
 
         $client->request('GET', '/admin/cheatsheet');

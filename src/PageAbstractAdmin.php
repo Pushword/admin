@@ -9,7 +9,7 @@ use Pushword\Admin\FormField\AbstractField;
 use Pushword\Admin\FormField\HostField;
 use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Component\App\AppPool;
-use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\Page;
 use Pushword\Core\Service\ImageManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -23,9 +23,9 @@ use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * @extends AbstractAdmin<PageInterface>
+ * @extends AbstractAdmin<Page>
  *
- * @implements AdminInterface<PageInterface>
+ * @implements AdminInterface<Page>
  */
 abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
 {
@@ -94,11 +94,11 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
 
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
-        return 'app/page';
+        return 'page';
     }
 
     /**
-     * @param ProxyQueryInterface<PageInterface> $query
+     * @param ProxyQueryInterface<Page> $query
      */
     protected function getQueryBuilderFrom(ProxyQueryInterface $query): QueryBuilder
     {
@@ -161,7 +161,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
                 continue;
             }
 
-            /** @var class-string<AbstractField<PageInterface>>[] */
+            /** @var class-string<AbstractField<Page>>[] */
             $blockFields = $block['fields'] ?? $block;
             $class = isset($block['expand']) ? 'expand' : '';
             $form->with($k, ['class' => $this->secondColClass ?? 'col-md-3 columnFields '.$class, 'label' => $k]);
@@ -174,7 +174,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
     }
 
     /**
-     * @phpstan-param PageInterface $object
+     * @phpstan-param Page $object
      */
     protected function alterNewInstance(object $object): void
     {
@@ -183,7 +183,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
     }
 
     /**
-     * @param ProxyQuery<PageInterface> $queryBuilder
+     * @param ProxyQuery<Page> $queryBuilder
      *
      * @psalm-suppress TooManyArguments
      */
@@ -220,7 +220,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
             ->add('h1', CallbackFilter::class, [
                 'callback' =>
                 /**
-                 * @param ProxyQuery<PageInterface> $queryBuilder
+                 * @param ProxyQuery<Page> $queryBuilder
                  */
                 fn (ProxyQuery $queryBuilder, string $alias, string $field, FilterData $filterData): ?bool => $this->getSearchFilterForTitle($queryBuilder, $alias, $field, $filterData),
                 'label' => 'admin.page.h1.label',
@@ -276,7 +276,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
     }
 
     /**
-     * @param PageInterface $object
+     * @param Page $object
      *
      * @psalm-suppress MoreSpecificImplementedParamType
      */
