@@ -2,7 +2,6 @@
 
 namespace Pushword\Admin;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Entity\Media;
 use Pushword\Core\Repository\MediaRepository;
@@ -33,7 +32,6 @@ final class MediaAdmin extends AbstractAdmin implements AdminInterface
 
     public function __construct(
         private readonly AdminFormFieldManager $adminFormFieldManager,
-        private readonly EntityManagerInterface $entityManager,
         private readonly ImageManager $imageManager,
         private readonly MediaRepository $mediaRepo,
     ) {
