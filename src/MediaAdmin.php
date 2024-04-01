@@ -5,6 +5,7 @@ namespace Pushword\Admin;
 use Doctrine\ORM\EntityManagerInterface;
 use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Entity\Media;
+use Pushword\Core\Repository\MediaRepository;
 use Pushword\Core\Service\ImageManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -34,6 +35,7 @@ final class MediaAdmin extends AbstractAdmin implements AdminInterface
         private readonly AdminFormFieldManager $adminFormFieldManager,
         private readonly EntityManagerInterface $entityManager,
         private readonly ImageManager $imageManager,
+        private readonly MediaRepository $mediaRepo,
     ) {
         parent::__construct();
     }
@@ -112,7 +114,7 @@ final class MediaAdmin extends AbstractAdmin implements AdminInterface
             'label' => 'admin.media.filetype.label',
         ]);* */
 
-        $mimeTypes = $this->entityManager->getRepository(Media::class)->getMimeTypes();
+        $mimeTypes = $this->mediaRepo->getMimeTypes();
         if ([] !== $mimeTypes) {
             $filter->add('mimeType', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,

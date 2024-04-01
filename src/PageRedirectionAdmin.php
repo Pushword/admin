@@ -16,9 +16,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 ])]
 class PageRedirectionAdmin extends PageAbstractAdmin
 {
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     protected function configureFormFields(FormMapper $form): void
     {
         $this->formFieldKey = 'admin_redirection_form_fields';

@@ -164,7 +164,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
             /** @var class-string<AbstractField<Page>>[] */
             $blockFields = $block['fields'] ?? $block;
             $class = isset($block['expand']) ? 'expand' : '';
-            $form->with($k, ['class' => $this->secondColClass ?? 'col-md-3 columnFields '.$class, 'label' => $k]);
+            $form->with((string) $k, ['class' => $this->secondColClass ?? 'col-md-3 columnFields '.$class, 'label' => $k]);
             foreach ($blockFields as $field) {
                 $this->adminFormFieldManager->addFormField($field, $form, $this);
             }
@@ -184,8 +184,6 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
 
     /**
      * @param ProxyQuery<Page> $queryBuilder
-     *
-     * @psalm-suppress TooManyArguments
      */
     public function getSearchFilterForTitle(ProxyQuery $queryBuilder, string $alias, string $field, FilterData $filterData): ?bool
     {
@@ -193,11 +191,14 @@ abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
             return null;
         }
 
+        /** @var string */
+        $filterValue = $filterData->getValue();
+
         $exp = new Expr();
         $queryBuilder->andWhere(
             (string) $exp->like(
                 (string) $exp->concat($alias.'.h1', $alias.'.title', $alias.'.slug'),
-                (string) $exp->literal('%'.$filterData->getValue().'%')
+                (string) $exp->literal('%'.$filterValue.'%')
             )
         );
 

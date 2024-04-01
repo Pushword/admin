@@ -12,10 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
  */
 class CustomPropertiesField extends AbstractField
 {
-    /**
-     * @psalm-suppress InvalidReturnStatement
-     * @psalm-suppress InvalidReturnType
-     */
     public function formField(FormMapper $form): void
     {
         $form->add('standAloneCustomProperties', TextareaType::class, [

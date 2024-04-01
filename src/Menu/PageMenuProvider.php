@@ -151,7 +151,7 @@ final readonly class PageMenuProvider
 
         if ([] !== $priorities) {
             $keysOrder = array_flip(array_keys($menuItemsNameList));
-            uksort($menuItemsNameList, static fn ($n1, $n2): int => (($priorities[$n1] ?? 1_000_000) <=> ($priorities[$n2] ?? 1_000_000)) ?: ($keysOrder[$n1] <=> $keysOrder[$n2])); // @phpstan-ignore-line
+            uksort($menuItemsNameList, static fn (string $n1, string $n2): int => (($priorities[$n1] ?? 1_000_000) <=> ($priorities[$n2] ?? 1_000_000)) ?: ($keysOrder[$n1] <=> $keysOrder[$n2])); // @phpstan-ignore-line
         }
 
         $menu->reorderChildren($menuItemsNameList);

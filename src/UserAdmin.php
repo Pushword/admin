@@ -72,7 +72,7 @@ class UserAdmin extends AbstractAdmin implements AdminInterface
 
         foreach ($fields[1] as $k => $block) {
             $block = \is_array($block) ? $block : throw new \Exception();
-            $form->with($k, ['class' => 'col-md-3 columnFields']);
+            $form->with((string) $k, ['class' => 'col-md-3 columnFields']);
             foreach ($block as $field) {
                 $field = \is_string($field) ? $field : throw new \Exception();
                 $this->adminFormFieldManager->addFormField($field, $form, $this);

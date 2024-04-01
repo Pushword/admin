@@ -4,6 +4,7 @@ namespace Pushword\Admin\FormField;
 
 use Pushword\Core\Entity\Media;
 use Pushword\Core\Entity\Page;
+use Pushword\Core\Repository\PageRepository;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
@@ -56,8 +57,9 @@ final class MediaPreviewField extends AbstractField
 
         $media = $this->admin->getSubject();
 
-        $this->relatedPages = $this->formFieldManager->em->getRepository(Page::class)
-            ->getPagesUsingMedia($media);
+        /** @var PageRepository */
+        $pageRepo = $this->formFieldManager->em->getRepository(Page::class);
+        $this->relatedPages = $pageRepo->getPagesUsingMedia($media);
 
         return $this->relatedPages;
     }
