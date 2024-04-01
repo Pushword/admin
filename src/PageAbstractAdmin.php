@@ -11,7 +11,6 @@ use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Component\App\AppPool;
 use Pushword\Core\Entity\Page;
 use Pushword\Core\Service\ImageManager;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -25,9 +24,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * @extends AbstractAdmin<Page>
  *
- * @implements AdminInterface<Page>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
+abstract class PageAbstractAdmin extends AbstractAdmin
 {
     final public const FORM_FIELD_KEY = 'admin_page_form_fields';
 

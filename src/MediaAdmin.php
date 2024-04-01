@@ -6,7 +6,6 @@ use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Entity\Media;
 use Pushword\Core\Repository\MediaRepository;
 use Pushword\Core\Service\ImageManager;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper; // use Sonata\BlockBundle\Meta\Metadata;
@@ -18,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 /**
  * @extends AbstractAdmin<Media>
  *
- * @implements AdminInterface<Media>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_media%',
@@ -26,7 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
     'label' => 'admin.label.media',
     'persist_filters' => true,
 ])]
-final class MediaAdmin extends AbstractAdmin implements AdminInterface
+final class MediaAdmin extends AbstractAdmin
 {
     public const MESSAGE_PREFIX = 'admin.media';
 

@@ -3,7 +3,6 @@
 namespace Pushword\Admin;
 
 use Pushword\Core\Entity\User;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -13,14 +12,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 /**
  * @extends AbstractAdmin<User>
  *
- * @implements AdminInterface<User>
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_user%',
     'manager_type' => 'orm',
     'label' => 'admin.label.user',
 ])]
-class UserAdmin extends AbstractAdmin implements AdminInterface
+class UserAdmin extends AbstractAdmin
 {
     final public const MESSAGE_PREFIX = 'admin.user';
 

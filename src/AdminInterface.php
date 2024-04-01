@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AdminInterface as AdminAdminInterface;
 
 /**
@@ -11,4 +12,5 @@ use Sonata\AdminBundle\Admin\AdminInterface as AdminAdminInterface;
  */
 interface AdminInterface extends AdminAdminInterface
 {
+    public function getEntityManager(): EntityManagerInterface;
 }
