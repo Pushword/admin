@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin;
 
+use Exception;
 use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Entity\Media;
 use Pushword\Core\Repository\MediaRepository;
@@ -81,7 +82,7 @@ final class MediaAdmin extends AbstractAdmin
 
         $form->with('Params', ['class' => 'col-md-4']);
         foreach ($fields[1] as $field) {
-            $field = \is_string($field) ? $field : throw new \Exception('');
+            $field = \is_string($field) ? $field : throw new Exception('');
             $this->adminFormFieldManager->addFormField($field, $form, $this);
         }
 

@@ -8,6 +8,9 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_page%',
     'manager_type' => 'orm',

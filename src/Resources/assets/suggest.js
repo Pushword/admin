@@ -66,7 +66,9 @@ Suggest.Local.prototype = {
   dispAllKey: false,
   classMouseOver: 'over',
   classSelect: 'select',
-  hookBeforeSearch: function () {},
+  delim: ' ',
+  hookBeforeSearch: null, //function (Suggest, text) {},
+  hookSearchResults: null, //function (Suggest, inputVale, currentSearch, searchResults, t) { return searchResults },
 
   setOptions: function (options) {
     Suggest.copyProperties(this, options)
@@ -109,8 +111,9 @@ Suggest.Local.prototype = {
 
     if (text == '' || text == null) return
 
-    this.hookBeforeSearch(text)
+    if (this.hookBeforeSearch) this.hookBeforeSearch(Suggest, text)
     var resultList = this._search(text)
+    if (this.hookSearchResults) resultList = window[this.hookSearchResults](this, this.getInputValue(), text, resultList)
     if (resultList.length != 0) this.createSuggestArea(resultList)
   },
 
@@ -121,6 +124,7 @@ Suggest.Local.prototype = {
 
     for (var i = 0, length = this.candidateList.length; i < length; i++) {
       if ((temp = this.isMatch(this.candidateList[i], text)) != null) {
+        if (this.getInputValue().includes(temp.replace(/(<([^>]+)>)/gi, ''))) continue
         resultList.push(temp)
         this.suggestIndexList.push(i)
 
@@ -160,7 +164,7 @@ Suggest.Local.prototype = {
 
   createSuggestArea: function (resultList) {
     this.suggestList = []
-    this.inputValueBackup = this.input.value
+    this.inputValueBackup = this.getInputValue()
 
     for (var i = 0, length = resultList.length; i < length; i++) {
       var element = document.createElement(this.listTagName)
@@ -178,12 +182,21 @@ Suggest.Local.prototype = {
     this.suggestArea.scrollTop = 0
   },
 
+  getInputValue: function () {
+    return this.input instanceof HTMLInputElement ? this.input.value : this.input.innerText
+  },
   getInputText: function () {
-    return this.input.value
+    return this.getInputValue()
+  },
+
+  /** @param {string} text */
+  setInputValue: function (text) {
+    if (this.input instanceof HTMLInputElement) this.input.value = text
+    else this.input.innerText = text
   },
 
   setInputText: function (text) {
-    this.input.value = text
+    this.setInputValue(text)
   },
 
   // key event
@@ -244,7 +257,7 @@ Suggest.Local.prototype = {
         this.activePosition--
         if (this.activePosition < 0) {
           this.activePosition = null
-          this.input.value = this.inputValueBackup
+          this.setInputValue(this.inputValueBackup)
           this.suggestArea.scrollTop = 0
           return
         }
@@ -259,7 +272,7 @@ Suggest.Local.prototype = {
 
       if (this.activePosition >= this.suggestList.length) {
         this.activePosition = null
-        this.input.value = this.inputValueBackup
+        this.setInputValue(this.inputValueBackup)
         this.suggestArea.scrollTop = 0
         return
       }
@@ -275,7 +288,7 @@ Suggest.Local.prototype = {
 
   keyEventEsc: function () {
     this.clearSuggestArea()
-    this.input.value = this.inputValueBackup
+    this.setInputValue(this.inputValueBackup)
     this.oldText = this.getInputText()
 
     if (window.opera) setTimeout(this._bind(this.moveEnd), 5)
@@ -349,10 +362,18 @@ Suggest.Local.prototype = {
     if (this.input.createTextRange) {
       this.input.focus() // Opera
       var range = this.input.createTextRange()
-      range.move('character', this.input.value.length)
+      range.move('character', this.getInputValue().length)
       range.select()
     } else if (this.input.setSelectionRange) {
-      this.input.setSelectionRange(this.input.value.length, this.input.value.length)
+      this.input.setSelectionRange(this.getInputValue().length, this.getInputValue().length)
+    } else {
+      this.input.focus()
+      var range = document.createRange()
+      range.selectNodeContents(this.input)
+      range.collapse(false)
+      var selection = window.getSelection()
+      selection.removeAllRanges()
+      selection.addRange(range)
     }
   },
 
@@ -405,11 +426,11 @@ Suggest.LocalMulti = function () {
 }
 Suggest.copyProperties(Suggest.LocalMulti.prototype, Suggest.Local.prototype)
 
-Suggest.LocalMulti.prototype.delim = ', ' // delimiter
+//Suggest.LocalMulti.prototype.delim = this.delim // delimiter
 
 Suggest.LocalMulti.prototype.keyEventReturn = function () {
   this.clearSuggestArea()
-  this.input.value += this.delim
+  this.setInputValue(this.getInputValue() + this.delim)
   this.moveEnd()
 }
 
@@ -425,7 +446,7 @@ Suggest.LocalMulti.prototype.keyEventOther = function (event) {
       }
 
       this.clearSuggestArea()
-      this.input.value += this.delim
+      this.setInputValue(this.getInputValue() + this.delim)
       if (window.opera) {
         setTimeout(this._bind(this.moveEnd), 5)
       } else {
@@ -440,7 +461,7 @@ Suggest.LocalMulti.prototype.listClick = function (event, index) {
   this.activePosition = index
   this.changeActive(index)
 
-  this.input.value += this.delim
+  this.setInputValue(this.getInputValue() + this.delim)
 
   this.clearSuggestArea()
   this.moveEnd()
@@ -450,9 +471,9 @@ Suggest.LocalMulti.prototype.getInputText = function () {
   var pos = this.getLastTokenPos()
 
   if (pos == -1) {
-    return this.input.value
+    return this.getInputValue()
   } else {
-    return this.input.value.substr(pos + 1)
+    return this.getInputValue().substr(pos + this.delim.length)
   }
 }
 
@@ -460,14 +481,14 @@ Suggest.LocalMulti.prototype.setInputText = function (text) {
   var pos = this.getLastTokenPos()
 
   if (pos == -1) {
-    this.input.value = text
+    this.setInputValue(text)
   } else {
-    this.input.value = this.input.value.substr(0, pos + 1) + text
+    this.setInputValue(this.getInputValue().substr(0, pos + this.delim.length) + text)
   }
 }
 
 Suggest.LocalMulti.prototype.getLastTokenPos = function () {
-  return this.input.value.lastIndexOf(this.delim)
+  return this.getInputValue().lastIndexOf(this.delim)
 }
 
 export { Suggest }

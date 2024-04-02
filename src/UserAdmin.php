@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin;
 
+use Exception;
 use Pushword\Core\Entity\User;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -70,10 +71,10 @@ class UserAdmin extends AbstractAdmin
         $form->end();
 
         foreach ($fields[1] as $k => $block) {
-            $block = \is_array($block) ? $block : throw new \Exception();
+            $block = \is_array($block) ? $block : throw new Exception();
             $form->with((string) $k, ['class' => 'col-md-3 columnFields']);
             foreach ($block as $field) {
-                $field = \is_string($field) ? $field : throw new \Exception();
+                $field = \is_string($field) ? $field : throw new Exception();
                 $this->adminFormFieldManager->addFormField($field, $form, $this);
             }
 

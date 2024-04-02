@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin\FormField;
 
+use DateTime;
 use Pushword\Core\Entity\Page;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DateTimePickerType;
@@ -28,7 +29,7 @@ class PagePublishedAtField extends AbstractField
 
     private function getHelp(): string
     {
-        return $this->formFieldManager->twig->render('@pwAdmin/page/page_draft.html.twig', ['page' => $this->getSubject(), 'draft' => $this->getSubject()->getPublishedAt() > new \DateTime('now')]);
+        return $this->formFieldManager->twig->render('@pwAdmin/page/page_draft.html.twig', ['page' => $this->getSubject(), 'draft' => $this->getSubject()->getPublishedAt() > new DateTime('now')]);
     }
 
     private function getSubject(): Page

@@ -2,8 +2,10 @@
 
 namespace Pushword\Admin;
 
+use DateTime;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use Exception;
 use Pushword\Admin\Controller\PageCRUDController;
 use Pushword\Admin\FormField\AbstractField;
 use Pushword\Admin\FormField\HostField;
@@ -102,12 +104,12 @@ abstract class PageAbstractAdmin extends AbstractAdmin
     protected function getQueryBuilderFrom(ProxyQueryInterface $query): QueryBuilder
     {
         if (! method_exists($query, 'getQueryBuilder')) {
-            throw new \Exception();
+            throw new Exception();
         }
 
         $qb = $query->getQueryBuilder();
 
-        return $qb instanceof QueryBuilder ? $qb : throw new \Exception();
+        return $qb instanceof QueryBuilder ? $qb : throw new Exception();
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
@@ -250,7 +252,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin
 
     protected function preUpdate(object $object): void
     {
-        $object->setUpdatedAt(new \DateTime());
+        $object->setUpdatedAt(new DateTime());
     }
 
     protected function configureListFields(ListMapper $list): void

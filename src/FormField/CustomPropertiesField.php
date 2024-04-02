@@ -17,9 +17,9 @@ class CustomPropertiesField extends AbstractField
         $form->add('standAloneCustomProperties', TextareaType::class, [
             'required' => false,
             'attr' => [
-                'style' => 'width:100%; height:100px;min-height:15vh',
-                // 'data-editor' => 'yaml',
-                'class' => 'autosize',
+                'style' => 'width:100%; height:100px;min-height:15vh;font-size:10px',
+                'data-editor' => 'yaml',
+                // 'class' => 'autosize',
             ],
             // 'label' => $this->formFieldManager->getMessagePrefix().'.customProperties.label',
             'label' => 'admin.page.customProperties.label',
