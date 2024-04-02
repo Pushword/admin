@@ -28,7 +28,7 @@ return [
                     'translation_domain' => 'messages',
                     'icon' => '<i class="fa fa-images" style="font-family: Font Awesome\ 5 Free"></i>',
                     // 'extras' => [PageMenuProvider::ORDER_NUMBER, 2],
-                    'items' => [['route' => 'admin_media_list', 'label' => 'a']],
+                    'items' => [['route' => 'admin_app_media_list', 'label' => 'a']],
                 ],
                 'app.admin.group.setting' => [
                     'on_top' => true,

@@ -2,18 +2,18 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\Page;
+use Pushword\Core\Entity\PageInterface;
 use Pushword\Version\PushwordVersionBundle;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
- * @extends AbstractField<Page>
+ * @extends AbstractField<PageInterface>
  */
 class PageEditMessageField extends AbstractField
 {
     /**
-     * @param FormMapper<Page> $form
+     * @param FormMapper<PageInterface> $form
      */
     public function formField(FormMapper $form): void
     {
@@ -42,7 +42,7 @@ class PageEditMessageField extends AbstractField
             ]) : '';
     }
 
-    private function getSubject(): Page
+    private function getSubject(): PageInterface
     {
         return $this->admin->getSubject();
     }

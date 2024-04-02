@@ -2,8 +2,8 @@
 
 namespace Pushword\Admin;
 
-use Exception;
-use Pushword\Core\Entity\User;
+use Pushword\Core\Entity\UserInterface;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -11,16 +11,16 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * @extends AbstractAdmin<User>
+ * @extends AbstractAdmin<UserInterface>
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @implements AdminInterface<UserInterface>
  */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_user%',
     'manager_type' => 'orm',
     'label' => 'admin.label.user',
 ])]
-class UserAdmin extends AbstractAdmin
+class UserAdmin extends AbstractAdmin implements AdminInterface
 {
     final public const MESSAGE_PREFIX = 'admin.user';
 
@@ -29,16 +29,6 @@ class UserAdmin extends AbstractAdmin
     ) {
         $this->adminFormFieldManager->setMessagePrefix(self::MESSAGE_PREFIX);
         parent::__construct();
-    }
-
-    protected function generateBaseRouteName(bool $isChildAdmin = false): string
-    {
-        return 'admin_user';
-    }
-
-    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
-    {
-        return 'user';
     }
 
     protected function configureDefaultSortValues(array &$sortValues): void
@@ -71,10 +61,10 @@ class UserAdmin extends AbstractAdmin
         $form->end();
 
         foreach ($fields[1] as $k => $block) {
-            $block = \is_array($block) ? $block : throw new Exception();
-            $form->with((string) $k, ['class' => 'col-md-3 columnFields']);
+            $block = \is_array($block) ? $block : throw new \Exception();
+            $form->with($k, ['class' => 'col-md-3 columnFields']);
             foreach ($block as $field) {
-                $field = \is_string($field) ? $field : throw new Exception();
+                $field = \is_string($field) ? $field : throw new \Exception();
                 $this->adminFormFieldManager->addFormField($field, $form, $this);
             }
 

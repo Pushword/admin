@@ -2,22 +2,21 @@
 
 namespace Pushword\Admin\FormField;
 
-use DateTime;
-use Pushword\Core\Entity\User;
+use Pushword\Core\Entity\UserInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DatePickerType;
 
 /**
- * @extends AbstractField<User>
+ * @extends AbstractField<UserInterface>
  */
 class UserDateOfBirthField extends AbstractField
 {
     /**
-     * @param FormMapper<User> $form
+     * @param FormMapper<UserInterface> $form
      */
     public function formField(FormMapper $form): void
     {
-        $dateTime = new DateTime();
+        $dateTime = new \DateTime();
 
         $form->add(
             'dateOfBirth',

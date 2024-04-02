@@ -2,17 +2,17 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\Media;
+use Pushword\Core\Entity\MediaInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 /**
- * @extends AbstractField<Media>
+ * @extends AbstractField<MediaInterface>
  */
 final class MediaMediaFileField extends AbstractField
 {
     /**
-     * @param FormMapper<Media> $form
+     * @param FormMapper<MediaInterface> $form
      */
     public function formField(FormMapper $form): void
     {

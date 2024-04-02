@@ -2,6 +2,7 @@
 
 namespace Pushword\Admin\Menu;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Pushword\Core\Component\App\AppPool;
@@ -9,20 +10,29 @@ use Sonata\AdminBundle\Event\ConfigureMenuEvent;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('knp_menu.menu_builder', ['method' => 'getMenu', 'alias' => 'page_admin_menu'])]
 #[AutoconfigureTag('knp_menu.menu_builder', ['method' => 'getRedirectionMenu', 'alias' => 'redirection_admin_menu'])]
-final readonly class PageMenuProvider
+final class PageMenuProvider
 {
     public const ORDER_NUMBER = 'priority';
 
-    public function __construct(
-        private FactoryInterface $factory,
-        private AppPool $apps,
-        private TranslatorInterface $translator,
-        private RequestStack $requestStack,
-    ) {
+    #[Required]
+    public AppPool $apps;
+
+    #[Required]
+    public ManagerRegistry $doctrine;
+
+    #[Required]
+    public TranslatorInterface $translator;
+
+    #[Required]
+    public RequestStack $requestStack;
+
+    public function __construct(private readonly FactoryInterface $factory)
+    {
     }
 
     public function getMenu(): ItemInterface
@@ -151,7 +161,7 @@ final readonly class PageMenuProvider
 
         if ([] !== $priorities) {
             $keysOrder = array_flip(array_keys($menuItemsNameList));
-            uksort($menuItemsNameList, static fn (string $n1, string $n2): int => (($priorities[$n1] ?? 1_000_000) <=> ($priorities[$n2] ?? 1_000_000)) ?: ($keysOrder[$n1] <=> $keysOrder[$n2])); // @phpstan-ignore-line
+            uksort($menuItemsNameList, static fn ($n1, $n2): int => (($priorities[$n1] ?? 1_000_000) <=> ($priorities[$n2] ?? 1_000_000)) ?: ($keysOrder[$n1] <=> $keysOrder[$n2])); // @phpstan-ignore-line
         }
 
         $menu->reorderChildren($menuItemsNameList);
@@ -161,13 +171,11 @@ final readonly class PageMenuProvider
 
     private function isRequestingRedirection(): bool
     {
-        $currentRequest = $this->requestStack->getCurrentRequest();
-
-        if (null === $currentRequest) {
+        if (null === $this->requestStack->getCurrentRequest()) {
             return false;
         }
 
-        return str_starts_with($currentRequest->attributes->getString('_route'), 'admin_redirection');
+        return str_starts_with($this->requestStack->getCurrentRequest()->attributes->getString('_route'), 'admin_redirection');
     }
 
     private function isRequestingPageEdit(string $host = ''): bool

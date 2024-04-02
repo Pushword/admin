@@ -8,9 +8,6 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_page%',
     'manager_type' => 'orm',
@@ -19,6 +16,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 ])]
 class PageRedirectionAdmin extends PageAbstractAdmin
 {
+    /**
+     * @psalm-suppress InvalidArgument
+     */
     protected function configureFormFields(FormMapper $form): void
     {
         $this->formFieldKey = 'admin_redirection_form_fields';
@@ -35,12 +35,10 @@ class PageRedirectionAdmin extends PageAbstractAdmin
         return 'app/redirection';
     }
 
-    /** @psalm-suppress MoreSpecificReturnType */
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
         $query = AbstractAdmin::configureQuery($query);
 
-        /** @psalm-suppress ArgumentTypeCoercion */
         $qb = $this->getQueryBuilderFrom($query);
 
         $rootAlias = current($qb->getRootAliases());
@@ -50,7 +48,6 @@ class PageRedirectionAdmin extends PageAbstractAdmin
         );
         $qb->setParameter('mcf', 'Location:%');
 
-        /** @psalm-suppress LessSpecificReturnStatement */
         return $query;
     }
 

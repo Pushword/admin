@@ -110,7 +110,7 @@ admin:
       draft: Draft
     editMessage:
       label: Reason of modification
-      help: Previous edit on %lastEditDatetime% <br> <em>%lastEditMessage%</em>
+      help:           Previous edit on %lastEditDatetime% <br> <em>%lastEditMessage%</em>
       helpVersionned: Previous edit on %lastEditDatetime% <br> <em>%lastEditMessage%</em> <br><a href="%seeVersionLink%">See hitory</a>
     createdAt:
       label: Created At
@@ -129,8 +129,6 @@ admin:
     customProperties:
       label: Autres paramètres
       help: Au format <em>YAML</em>.
-    tags:
-      label: "Tag 1, Tag 2, ..."
     og:
       label: Open Graph Card
     ogTitle:
@@ -148,6 +146,9 @@ admin:
     twitterCreator:
       label: Twitter Creator
       help: <code>@Username</code>, valeur par défaut si régler dans l'App.
+    twitterCard:
+      label: Twitter Card
+      help: <a href="https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started" target=_blanks>En savoir plus</a>
     priority:
       label: Priority
 

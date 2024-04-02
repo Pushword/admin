@@ -2,11 +2,12 @@
 
 namespace Pushword\Admin;
 
-use Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use Pushword\Admin\Utils\Thumb;
-use Pushword\Core\Entity\Media;
-use Pushword\Core\Repository\MediaRepository;
+use Pushword\Core\Entity\MediaInterface;
+use Pushword\Core\Repository\Repository;
 use Pushword\Core\Service\ImageManager;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper; // use Sonata\BlockBundle\Meta\Metadata;
@@ -16,9 +17,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * @extends AbstractAdmin<Media>
+ * @extends AbstractAdmin<MediaInterface>
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @implements AdminInterface<MediaInterface>
  */
 #[AutoconfigureTag('sonata.admin', [
     'model_class' => '%pw.entity_media%',
@@ -26,26 +27,16 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
     'label' => 'admin.label.media',
     'persist_filters' => true,
 ])]
-final class MediaAdmin extends AbstractAdmin
+final class MediaAdmin extends AbstractAdmin implements AdminInterface
 {
     public const MESSAGE_PREFIX = 'admin.media';
 
     public function __construct(
         private readonly AdminFormFieldManager $adminFormFieldManager,
+        private readonly EntityManagerInterface $entityManager,
         private readonly ImageManager $imageManager,
-        private readonly MediaRepository $mediaRepo,
     ) {
         parent::__construct();
-    }
-
-    protected function generateBaseRouteName(bool $isChildAdmin = false): string
-    {
-        return 'admin_media';
-    }
-
-    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
-    {
-        return 'media';
     }
 
     protected function configure(): void
@@ -82,7 +73,7 @@ final class MediaAdmin extends AbstractAdmin
 
         $form->with('Params', ['class' => 'col-md-4']);
         foreach ($fields[1] as $field) {
-            $field = \is_string($field) ? $field : throw new Exception('');
+            $field = \is_string($field) ? $field : throw new \Exception('');
             $this->adminFormFieldManager->addFormField($field, $form, $this);
         }
 
@@ -107,12 +98,13 @@ final class MediaAdmin extends AbstractAdmin
         $filter->add('mimeType', ModelAutocompleteFilter::class, [
             'field_options' => [
                 'property' => 'mimeType',
+                'class' => $this->mediaClass,
                 'multiple' => true
         ],
             'label' => 'admin.media.filetype.label',
         ]);* */
 
-        $mimeTypes = $this->mediaRepo->getMimeTypes();
+        $mimeTypes = Repository::getMediaRepository($this->entityManager, $this->getModelClass())->getMimeTypes();
         if ([] !== $mimeTypes) {
             $filter->add('mimeType', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,

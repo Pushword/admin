@@ -2,18 +2,17 @@
 
 namespace Pushword\Admin\FormField;
 
-use DateTime;
-use Pushword\Core\Entity\Page;
+use Pushword\Core\Entity\PageInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DateTimePickerType;
 
 /**
- * @extends AbstractField<Page>
+ * @extends AbstractField<PageInterface>
  */
 class PagePublishedAtField extends AbstractField
 {
     /**
-     * @param FormMapper<Page> $form
+     * @param FormMapper<PageInterface> $form
      */
     public function formField(FormMapper $form): void
     {
@@ -29,10 +28,10 @@ class PagePublishedAtField extends AbstractField
 
     private function getHelp(): string
     {
-        return $this->formFieldManager->twig->render('@pwAdmin/page/page_draft.html.twig', ['page' => $this->getSubject(), 'draft' => $this->getSubject()->getPublishedAt() > new DateTime('now')]);
+        return $this->formFieldManager->twig->render('@pwAdmin/page/page_draft.html.twig', ['page' => $this->getSubject(), 'draft' => $this->getSubject()->getPublishedAt() > new \DateTime('now')]);
     }
 
-    private function getSubject(): Page
+    private function getSubject(): PageInterface
     {
         return $this->admin->getSubject();
     }

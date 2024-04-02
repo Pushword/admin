@@ -284,11 +284,9 @@ deux espace sont nécessaires.{% endapply %}</code></pre>
 
 <div class="relative mb-8 overflow-hidden">
     <pre class="p-3 overflow-x-auto text-sm text-white bg-gray-800 rounded-xl"><code>{% apply spaceless %}
-{{ "{{" }} pages_list('exampleTag')|unprose {{ "}}" }}
-{{ "{{" }} pages_list('exampleTag OR <!--invisible-hash-in-content--> OR comment:invisible-hash-in-content')|unprose {{ "}}" }}
+{{ "{{" }} pages_list('keyword X OR <!--invisible-hash-in-content-->')|unprose {{ "}}" }}
+{{ "{{" }} pages_list('keyword X OR <!--invisible-hash-in-content-->', max, order, view, host)|unprose {{ "}}" }}
 {% endapply %}</code></pre>
-
-Discover more on [Advanced Pages Listing](https://pushword.piedweb.com/pages-list).
 
 {% apply markdown %}
 - `max` nombre maximum d'items à montrer, peut être un tableau pour paginer le résultat, défault : `0`, no limit

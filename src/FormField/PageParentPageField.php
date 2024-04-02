@@ -3,24 +3,24 @@
 namespace Pushword\Admin\FormField;
 
 use Doctrine\ORM\QueryBuilder;
-use Pushword\Core\Entity\Page;
+use Pushword\Core\Entity\PageInterface;
 use Pushword\Core\Repository\PageRepository;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
- * @extends AbstractField<Page>
+ * @extends AbstractField<PageInterface>
  */
 class PageParentPageField extends AbstractField
 {
     /**
-     * @param FormMapper<Page> $form
+     * @param FormMapper<PageInterface> $form
      *
      * @psalm-suppress UnnecessaryVarAnnotation
      */
     public function formField(FormMapper $form): void
     {
-        /** @var Page */
+        /** @var PageInterface */
         $page = $this->admin->getSubject();
         $form->add(
             'parentPage',
@@ -34,7 +34,7 @@ class PageParentPageField extends AbstractField
         );
     }
 
-    public function getQueryBuilder(PageRepository $repo, Page $page): QueryBuilder
+    public function getQueryBuilder(PageRepository $repo, PageInterface $page): QueryBuilder
     {
         $qb = $repo->createQueryBuilder('p')
                 ->andWhere('p.id != :id')

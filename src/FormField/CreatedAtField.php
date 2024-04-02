@@ -24,6 +24,9 @@ class CreatedAtField extends AbstractField
 
     /**
      * @param FormMapper<T> $form
+     *
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidReturnType
      */
     public function formField(FormMapper $form): void
     {

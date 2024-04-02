@@ -9,7 +9,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->defaults()
         ->autowire()
-        ->autoconfigure();
+        ->autoconfigure()
+        ->bind('$mediaClass', '%pw.entity_media%')
+        ->bind('$pageClass', '%pw.entity_page%')
+        ->bind('$userClass', '%pw.entity_user%');
 
     $services->load('Pushword\Admin\\', __DIR__.'/../../src/')
         ->exclude([

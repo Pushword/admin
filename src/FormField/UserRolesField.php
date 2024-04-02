@@ -2,18 +2,18 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\User;
+use Pushword\Core\Entity\UserInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * @extends AbstractField<User>
+ * @extends AbstractField<UserInterface>
  */
 class UserRolesField extends AbstractField
 {
     /**
-     * @param FormMapper<User> $form
+     * @param FormMapper<UserInterface> $form
      */
     public function formField(FormMapper $form): void
     {

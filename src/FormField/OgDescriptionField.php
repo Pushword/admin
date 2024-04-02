@@ -2,17 +2,17 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\Page;
+use Pushword\Core\Entity\PageInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
- * @extends AbstractField<Page>
+ * @extends AbstractField<PageInterface>
  */
 class OgDescriptionField extends AbstractField
 {
     /**
-     * @param FormMapper<Page> $form
+     * @param FormMapper<PageInterface> $form
      */
     public function formField(FormMapper $form): void
     {

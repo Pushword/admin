@@ -6,7 +6,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pushword\Admin\FormField\AbstractField;
 use Pushword\Admin\FormField\Event as FormEvent;
 use Pushword\Core\Component\App\AppPool;
-use Pushword\Core\Entity\User;
+use Pushword\Core\Entity\MediaInterface;
+use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\UserInterface;
 use Pushword\Core\Service\ImageManager;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -16,10 +18,18 @@ use Twig\Environment;
 
 class AdminFormFieldManager
 {
-    public ?User $user;
+    public ?UserInterface $user;
 
+    /**
+     * @param class-string<MediaInterface> $mediaClass
+     * @param class-string<UserInterface>  $userClass
+     * @param class-string<PageInterface>  $pageClass
+     */
     public function __construct(
         public readonly AppPool $apps,
+        public readonly string $pageClass,
+        public readonly string $mediaClass,
+        public readonly string $userClass,
         public readonly EntityManagerInterface $em,
         public readonly RouterInterface $router,
         public readonly Environment $twig,
@@ -28,9 +38,9 @@ class AdminFormFieldManager
         Security $security,
         public readonly EventDispatcherInterface $eventDispatcher,
     ) {
-        /** @var ?User */
+        /** @var ?UserInterface */
         $user = $security->getUser();
-        $this->user = $user; // null === $securityTokenStorage->getToken() || ! ($user = $securityTokenStorage->getToken()->getUser()) instanceof User ? null : $user; // $security->getUser();
+        $this->user = $user; // null === $securityTokenStorage->getToken() || ! ($user = $securityTokenStorage->getToken()->getUser()) instanceof UserInterface ? null : $user; // $security->getUser();
     }
 
     public function getEntityManager(): EntityManagerInterface
@@ -38,7 +48,7 @@ class AdminFormFieldManager
         return $this->em;
     }
 
-    private string $messagePrefix = '';
+    private string $messagePrefix;
 
     public function getMessagePrefix(): string
     {
@@ -82,7 +92,6 @@ class AdminFormFieldManager
      */
     public function addFormField(string $field, FormMapper $form, AdminInterface $admin): void
     {
-        /** @psalm-suppress UnsafeInstantiation */
         (new $field($this, $admin))->formField($form);
     }
 }

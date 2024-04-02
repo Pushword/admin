@@ -2,16 +2,16 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\Media;
+use Pushword\Core\Entity\MediaInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * @extends AbstractField<Media>
+ * @extends AbstractField<MediaInterface>
  */
 final class MediaNamesField extends AbstractField
 {
     /**
-     * @param FormMapper<Media> $form
+     * @param FormMapper<MediaInterface> $form
      */
     public function formField(FormMapper $form): void
     {

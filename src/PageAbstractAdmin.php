@@ -2,17 +2,16 @@
 
 namespace Pushword\Admin;
 
-use DateTime;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use Exception;
 use Pushword\Admin\Controller\PageCRUDController;
 use Pushword\Admin\FormField\AbstractField;
 use Pushword\Admin\FormField\HostField;
 use Pushword\Admin\Utils\Thumb;
 use Pushword\Core\Component\App\AppPool;
-use Pushword\Core\Entity\Page;
+use Pushword\Core\Entity\PageInterface;
 use Pushword\Core\Service\ImageManager;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -24,11 +23,11 @@ use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * @extends AbstractAdmin<Page>
+ * @extends AbstractAdmin<PageInterface>
  *
- * @psalm-suppress PropertyNotSetInConstructor
+ * @implements AdminInterface<PageInterface>
  */
-abstract class PageAbstractAdmin extends AbstractAdmin
+abstract class PageAbstractAdmin extends AbstractAdmin implements AdminInterface
 {
     final public const FORM_FIELD_KEY = 'admin_page_form_fields';
 
@@ -95,21 +94,21 @@ abstract class PageAbstractAdmin extends AbstractAdmin
 
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
-        return 'page';
+        return 'app/page';
     }
 
     /**
-     * @param ProxyQueryInterface<Page> $query
+     * @param ProxyQueryInterface<PageInterface> $query
      */
     protected function getQueryBuilderFrom(ProxyQueryInterface $query): QueryBuilder
     {
         if (! method_exists($query, 'getQueryBuilder')) {
-            throw new Exception();
+            throw new \Exception();
         }
 
         $qb = $query->getQueryBuilder();
 
-        return $qb instanceof QueryBuilder ? $qb : throw new Exception();
+        return $qb instanceof QueryBuilder ? $qb : throw new \Exception();
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
@@ -162,10 +161,10 @@ abstract class PageAbstractAdmin extends AbstractAdmin
                 continue;
             }
 
-            /** @var class-string<AbstractField<Page>>[] */
+            /** @var class-string<AbstractField<PageInterface>>[] */
             $blockFields = $block['fields'] ?? $block;
             $class = isset($block['expand']) ? 'expand' : '';
-            $form->with((string) $k, ['class' => $this->secondColClass ?? 'col-md-3 columnFields '.$class, 'label' => $k]);
+            $form->with($k, ['class' => $this->secondColClass ?? 'col-md-3 columnFields '.$class, 'label' => $k]);
             foreach ($blockFields as $field) {
                 $this->adminFormFieldManager->addFormField($field, $form, $this);
             }
@@ -175,7 +174,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin
     }
 
     /**
-     * @phpstan-param Page $object
+     * @phpstan-param PageInterface $object
      */
     protected function alterNewInstance(object $object): void
     {
@@ -184,7 +183,9 @@ abstract class PageAbstractAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ProxyQuery<Page> $queryBuilder
+     * @param ProxyQuery<PageInterface> $queryBuilder
+     *
+     * @psalm-suppress TooManyArguments
      */
     public function getSearchFilterForTitle(ProxyQuery $queryBuilder, string $alias, string $field, FilterData $filterData): ?bool
     {
@@ -192,14 +193,11 @@ abstract class PageAbstractAdmin extends AbstractAdmin
             return null;
         }
 
-        /** @var string */
-        $filterValue = $filterData->getValue();
-
         $exp = new Expr();
         $queryBuilder->andWhere(
             (string) $exp->like(
                 (string) $exp->concat($alias.'.h1', $alias.'.title', $alias.'.slug'),
-                (string) $exp->literal('%'.$filterValue.'%')
+                (string) $exp->literal('%'.$filterData->getValue().'%')
             )
         );
 
@@ -222,7 +220,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin
             ->add('h1', CallbackFilter::class, [
                 'callback' =>
                 /**
-                 * @param ProxyQuery<Page> $queryBuilder
+                 * @param ProxyQuery<PageInterface> $queryBuilder
                  */
                 fn (ProxyQuery $queryBuilder, string $alias, string $field, FilterData $filterData): ?bool => $this->getSearchFilterForTitle($queryBuilder, $alias, $field, $filterData),
                 'label' => 'admin.page.h1.label',
@@ -252,7 +250,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin
 
     protected function preUpdate(object $object): void
     {
-        $object->setUpdatedAt(new DateTime());
+        $object->setUpdatedAt(new \DateTime());
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -278,7 +276,7 @@ abstract class PageAbstractAdmin extends AbstractAdmin
     }
 
     /**
-     * @param Page $object
+     * @param PageInterface $object
      *
      * @psalm-suppress MoreSpecificImplementedParamType
      */

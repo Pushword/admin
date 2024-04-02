@@ -34,7 +34,7 @@ class HostField extends AbstractField
 
     private function getDefaultHost(): string
     {
-        if ($this->admin->hasRequest() && \is_string($host = $this->admin->getRequest()->query->get('host'))) {
+        if ($this->admin->hasRequest() && ($host = $this->admin->getRequest()->query->get('host')) !== null) {
             $this->formFieldManager->apps->switchCurrentApp($host); // todo move it before fields initializations
 
             return $host;

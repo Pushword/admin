@@ -12,15 +12,15 @@ abstract class AbstractAdminTestClass extends PantherTestCase
 {
     protected static bool $userCreated = false;
 
-    protected ?KernelBrowser $client = null;
+    protected $client;
 
-    protected function loginUser(?KernelBrowser $client = null): KernelBrowser
+    protected function loginUser($client = null): KernelBrowser
     {
         if (null !== $this->client) {
             return $this->client;
         }
 
-        $this->client = $client ?? static::createClient();
+        $this->client = $client ?: static::createClient();
 
         self::createUser();
 
@@ -35,15 +35,14 @@ abstract class AbstractAdminTestClass extends PantherTestCase
 
     protected static function createUser(): void
     {
-        if (self::$userCreated) {
+        if (true === self::$userCreated) {
             return;
         }
 
-        /** @var UserRepository */
         $userRepository = static::getContainer()->get(UserRepository::class);
-        $testUser = $userRepository->findOneBy(['email' => 'admin@example.tld']);
+        $testUser = $userRepository->findOneByEmail('admin@example.tld');
 
-        if (null !== $testUser) {
+        if ($testUser) {
             return;
         }
 

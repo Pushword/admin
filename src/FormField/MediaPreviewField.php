@@ -2,23 +2,23 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\Media;
-use Pushword\Core\Entity\Page;
-use Pushword\Core\Repository\PageRepository;
+use Pushword\Core\Entity\MediaInterface;
+use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Repository\Repository;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * @extends AbstractField<Media>
+ * @extends AbstractField<MediaInterface>
  */
 final class MediaPreviewField extends AbstractField
 {
     /**
-     * @var ?Page[]
+     * @var ?PageInterface[]
      */
     private ?array $relatedPages = null;
 
     /**
-     * @param FormMapper<Media> $form
+     * @param FormMapper<MediaInterface> $form
      */
     public function formField(FormMapper $form): void
     {
@@ -47,7 +47,7 @@ final class MediaPreviewField extends AbstractField
     }
 
     /**
-     * @return Page[]
+     * @return PageInterface[]
      */
     private function getRelatedPages(): array
     {
@@ -57,9 +57,8 @@ final class MediaPreviewField extends AbstractField
 
         $media = $this->admin->getSubject();
 
-        /** @var PageRepository */
-        $pageRepo = $this->formFieldManager->em->getRepository(Page::class);
-        $this->relatedPages = $pageRepo->getPagesUsingMedia($media);
+        $this->relatedPages = Repository::getPageRepository($this->formFieldManager->em, $this->formFieldManager->pageClass)
+            ->getPagesUsingMedia($media);
 
         return $this->relatedPages;
     }
