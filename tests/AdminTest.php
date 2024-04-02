@@ -2,21 +2,23 @@
 
 namespace Pushword\Admin\Tests;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class AdminTest extends AbstractAdminTestClass
 {
-    public function testLogin()
+    public function testLogin(): void
     {
         $this->tearDown();
         $client = static::createClient();
 
         $client->request('GET', '/admin/');
-        $this->assertEquals(301, $client->getResponse()->getStatusCode());
+        self::assertSame(Response::HTTP_MOVED_PERMANENTLY, $client->getResponse()->getStatusCode(), (string) $client->getResponse()->getContent());
 
         $client->request('GET', '/login');
-        $this->assertStringContainsString('Connexion', $client->getResponse());
+        self::assertStringContainsString('Connexion', $client->getResponse());
     }
 
-    public function testAdmins()
+    public function testAdmins(): void
     {
         $client = $this->loginUser();
 
@@ -28,14 +30,14 @@ class AdminTest extends AbstractAdminTestClass
         foreach ($admins as $admin) {
             foreach ($actions as $action) {
                 $client->request('GET', '/admin/'.$admin.'/'.$action);
-                $this->assertResponseIsSuccessful();
+                self::assertResponseIsSuccessful();
             }
         }
 
         $client->request('GET', '/admin/page/2/edit');
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
 
         $client->request('GET', '/admin/cheatsheet');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        self::assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode(), (string) $client->getResponse()->getContent());
     }
 }
