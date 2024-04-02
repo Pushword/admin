@@ -3,8 +3,7 @@
 namespace Pushword\Admin\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Pushword\Core\Entity\PageInterface;
-use Pushword\Core\Repository\Repository;
+use Pushword\Core\Entity\Page;
 use Sonata\AdminBundle\Controller\CRUDController as SonataCRUDController;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -14,25 +13,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
- * @extends SonataCRUDController<PageInterface>
+ * @extends SonataCRUDController<Page>
+ *
+ * @psalm-suppress MissingConstructor
  */
 #[AutoconfigureTag('controller.service_arguments')]
 class PageCRUDController extends SonataCRUDController
 {
-    protected ParameterBagInterface $params;
+    #[Required]
+    public ParameterBagInterface $params;
 
     #[Required]
     public EntityManagerInterface $entityManager;
 
-    #[Required]
-    public function setParams(ParameterBagInterface $parameterBag): void
-    {
-        $this->params = $parameterBag;
-    }
-
     public function list(Request $request): Response
     {
-        if (($listMode = $request->query->get('_list_mode')) !== null) {
+        if (($listMode = $request->query->getString('_list_mode')) !== '') {
             $this->admin->setListMode($listMode);
         }
 
@@ -48,7 +44,7 @@ class PageCRUDController extends SonataCRUDController
 
     public function tree(): Response
     {
-        $pages = Repository::getPageRepository($this->entityManager, $this->params->get('pw.entity_page')) // @phpstan-ignore-line
+        $pages = $this->entityManager->getRepository(Page::class)
             ->getPagesWithoutParent();
 
         return $this->render('@pwAdmin/page/page_treeView.html.twig', [

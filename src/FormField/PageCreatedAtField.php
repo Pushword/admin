@@ -2,17 +2,17 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\Page;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Type\DateTimePickerType;
 
 /**
- * @extends CreatedAtField<PageInterface>
+ * @extends CreatedAtField<Page>
  */
 class PageCreatedAtField extends CreatedAtField
 {
     /**
-     * @param FormMapper<PageInterface> $form
+     * @param FormMapper<Page> $form
      */
     public function formField(FormMapper $form): void
     {

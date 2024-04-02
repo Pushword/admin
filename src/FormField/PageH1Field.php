@@ -2,12 +2,12 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\Page;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
- * @extends AbstractField<PageInterface>
+ * @extends AbstractField<Page>
  */
 class PageH1Field extends AbstractField
 {
@@ -19,7 +19,7 @@ class PageH1Field extends AbstractField
         max-width: 640px; ';
 
     /**
-     * @param FormMapper<PageInterface> $form
+     * @param FormMapper<Page> $form
      */
     public function formField(FormMapper $form, string $style = ''): void
     {

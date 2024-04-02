@@ -2,17 +2,17 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\Page;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 /**
- * @extends AbstractField<PageInterface>
+ * @extends AbstractField<Page>
  */
 class PageTranslationsField extends AbstractField
 {
     /**
-     * @param FormMapper<PageInterface> $form
+     * @param FormMapper<Page> $form
      */
     public function formField(FormMapper $form): void
     {
@@ -25,7 +25,7 @@ class PageTranslationsField extends AbstractField
             'help_html' => true,
             'help' => 'admin.page.translations.help',
             'btn_add' => false,
-            'to_string_callback' => static fn (PageInterface $entity): string => $entity->getLocale().' ('.$entity->getSlug().')',
+            'to_string_callback' => static fn (Page $entity): string => $entity->getLocale().' ('.$entity->getSlug().')',
         ]);
     }
 }

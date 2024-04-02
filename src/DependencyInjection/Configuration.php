@@ -24,6 +24,7 @@ use Pushword\Admin\FormField\PageSlugField;
 use Pushword\Admin\FormField\PageTitleField;
 use Pushword\Admin\FormField\PageTranslationsField;
 use Pushword\Admin\FormField\PriorityField;
+use Pushword\Admin\FormField\TagsField;
 use Pushword\Admin\FormField\UserEmailField;
 use Pushword\Admin\FormField\UserPasswordField;
 use Pushword\Admin\FormField\UserRolesField;
@@ -57,7 +58,7 @@ class Configuration implements ConfigurationInterface
     ];
 
     final public const DEFAULT_ADMIN_PAGE_FORM_FIELDS = [
-        [PageH1Field::class, PageMainContentField::class],
+        [TagsField::class, PageH1Field::class, PageMainContentField::class],
         [
             'admin.page.revisions' => [PageEditMessageField::class],
             'admin.page.state.label' => [PagePublishedAtField::class, PageMetaRobotsField::class],
@@ -77,7 +78,7 @@ class Configuration implements ConfigurationInterface
             'admin.page.og.label' => [
                 'expand' => true,
                 'fields' => [OgTitleField::class, OgDescriptionField::class, OgImageField::class,
-                    OgTwitterCardField::class, OgTwitterSiteField::class, OgTwitterCreatorField::class, ],
+             ],
             ],
             */
         ],

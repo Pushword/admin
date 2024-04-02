@@ -18,7 +18,10 @@ class FormFieldReplacer
 
     /**
      * @param class-string<AbstractField<T>>[]|array<class-string<AbstractField<T>>[]> $fields
-     */
+     *
+     * @psalm-suppress ReferenceConstraintViolation
+     * @psalm-suppress PossiblyInvalidArgument
+     * */
     public function run(string $formFieldClass, string $newFormFieldClass, array &$fields): void
     {
         foreach ($fields as $k => $field) {

@@ -2,14 +2,14 @@
 
 namespace Pushword\Admin\FormField;
 
-use Pushword\Core\Entity\PageInterface;
+use Pushword\Core\Entity\Page;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use function Symfony\Component\String\u;
 
 /**
- * @extends AbstractField<PageInterface>
+ * @extends AbstractField<Page>
  */
 class PageSlugField extends AbstractField
 {
@@ -19,7 +19,7 @@ class PageSlugField extends AbstractField
             return 'admin.page.slug.help';
         }
 
-        /** @param PageInterface $page */
+        /** @param Page $page */
         $page = $this->admin->getSubject();
 
         $url = $page->getHost().$this->formFieldManager->router->generate('pushword_page', ['slug' => $page->getRealSlug()]);
@@ -39,7 +39,7 @@ class PageSlugField extends AbstractField
     }
 
     /**
-     * @param FormMapper<PageInterface> $form
+     * @param FormMapper<Page> $form
      */
     public function formField(FormMapper $form): void
     {
