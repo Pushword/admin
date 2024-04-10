@@ -1,6 +1,5 @@
 {% extends '@SonataAdmin/CRUD/base_list.html.twig' %}
 
-
 {% block table_header %}
   {% if admin.getListMode() != 'mosaic' %}
     {{ parent() }}
@@ -17,8 +16,6 @@
   </style>
 {% endblock %}
 
-
-
 {% block table_body %}
   <tbody>
     {% if admin.getListMode() == 'tree' %}
@@ -29,10 +26,8 @@
   </tbody>
 {% endblock %}
 
-
 {% block list_filters_actions %}
   {{ parent() }}
-
 
   {% if admin.datagrid.filters
     and admin.datagrid.filters.h1 is defined

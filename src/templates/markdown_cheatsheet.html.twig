@@ -1,6 +1,5 @@
 {% extends view('/base.html.twig') %}
 
-
 {% block title %}{{ 'md_cs.page.h1'|trans }}{% endblock %}
 
 {% block robots %}
@@ -40,7 +39,6 @@
 </div>
 
 {% block cheatsheet_content %}
-
 
 <!-- -->
 
@@ -124,10 +122,9 @@ Fluo             : &lt;mark&gt;fluuuuooo&lt;/mark&gt;
 <br>
 [{{ 'md_cs.link_other_site'|trans }}](https://piedweb.com/)<br>
 <br>
-{{ "{{ link('"~('md_cs.link_bot_hidden'|trans) ~"', 'https://example.tld/') }}" }}
+{{ "{{ link('" ~ ('md_cs.link_bot_hidden'|trans) ~ "', 'https://example.tld/') }}" }}
 {% endapply %}</code></pre>
 </div>
-
 
 <!-- -->
 
@@ -158,7 +155,6 @@ Fluo             : &lt;mark&gt;fluuuuooo&lt;/mark&gt;
 {{ "{<!---->{" }} tel('+33 7 00 00 00 00 00 00 00') }}
 </code></pre>
 </div>
-
 
 <!-- -->
 
@@ -259,7 +255,6 @@ deux espace sont nécessaires.{% endapply %}</code></pre>
 {% endapply %}</code></pre>
 </div>
 
-
 <!-- -->
 
 <h2 id="video" class="mt-16 mb-4 text-3xl font-bold">{{ 'md_cs.video'|trans }}</h2>
@@ -309,9 +304,7 @@ Location: http://example.eg/
 {% endapply %}</code></pre>
 </div>
 
-
 <!-- -->
-
 
 <h2 id="others" class="mt-16 mb-4 text-3xl font-bold">{{ 'md_cs.others'|trans }}</h2>
 
@@ -332,7 +325,6 @@ Location: http://example.eg/
 - Tout autre *Autres Paramètres* peut êgalement être appelé directement dans la page `{{ "{{ page.customParam }}" }}`
 {% endapply %}
 </div>
-
 
 {% endblock %}
 
