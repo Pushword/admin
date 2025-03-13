@@ -15,4 +15,3 @@ PostInstall::remove([
 
 echo '~~ Adding Puswhord Admin Routes'.chr(10);
 PostInstall::addOnTop('config/routes.yaml', "admin:\n    resource: '@PushwordAdminBundle/AdminRoutes.yaml'\n");
-PostInstall::addOnTop('config/framework.yaml', "admin:\n    resource: '@PushwordAdminBundle/AdminRoutes.yaml'\n");
