@@ -85,7 +85,3 @@ final class MediaDimensionsFilter implements FilterInterface
     }
 }
 
-
-
-
-
