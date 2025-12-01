@@ -45,7 +45,6 @@ function ensureInlineModal() {
     iframeClass: INLINE_IFRAME_CLASS,
     title: 'Inline editor',
     hasHeader: false,
-    modalClass: 'pw-inline-edit__modal',
   })
 
   if (result.iframe) {
@@ -67,7 +66,6 @@ function openInlineModal(url) {
       iframeClass: INLINE_IFRAME_CLASS,
       title: 'Inline editor',
       hasHeader: false,
-      modalClass: 'pw-inline-edit__modal',
     },
     normalizedUrl,
   )
