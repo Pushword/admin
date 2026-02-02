@@ -19,7 +19,7 @@ abstract class AbstractAdminTestClass extends PantherTestCase
     protected ?KernelBrowser $client = null;
 
     /**
-     * Surcharge pour utiliser le chemin absolu du répertoire public.
+     * Override to use the absolute path of the public directory.
      *
      * @param array<string, mixed> $options
      * @param array<string, mixed> $kernelOptions
@@ -41,6 +41,20 @@ abstract class AbstractAdminTestClass extends PantherTestCase
         if (! isset($options['browser'])) {
             $options['browser'] = static::CHROME;
         }
+
+        // Pass critical env vars to the web server process.
+        // PHPUnit's <server> directive only sets $_SERVER, not $_ENV/putenv,
+        // so Panther's Process won't inherit them automatically.
+        if (! isset($options['env'])) {
+            $options['env'] = [];
+        }
+
+        $options['env'] += array_filter([
+            'APP_ENV' => $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? 'test',
+            'APP_DEBUG' => $_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? '1',
+            'TEST_RUN_ID' => $_SERVER['TEST_RUN_ID'] ?? $_ENV['TEST_RUN_ID'] ?? getenv('TEST_RUN_ID') ?: '',
+            'PANTHER_TIMEOUT_MULTIPLIER' => $_SERVER['PANTHER_TIMEOUT_MULTIPLIER'] ?? $_ENV['PANTHER_TIMEOUT_MULTIPLIER'] ?? getenv('PANTHER_TIMEOUT_MULTIPLIER') ?: '',
+        ]);
 
         return parent::createPantherClient($options, $kernelOptions, $managerOptions);
     }
