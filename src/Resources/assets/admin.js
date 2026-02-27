@@ -14,9 +14,6 @@ import { filterImageFormField } from './admin.filterImageFormField'
 // Compression modules
 import { initImageCompressor } from './admin.imageCompressor'
 
-// Multi-upload module
-import { initMultiUpload } from './admin.multiUpload'
-
 // Selection modules
 import { mediaPicker } from './admin.mediaPicker'
 import { inlinePopup } from './admin.inlinePopup'
@@ -72,9 +69,6 @@ window.addEventListener('load', function () {
 
   // Image compression before upload
   initImageCompressor()
-
-  // Multi-upload
-  initMultiUpload()
 
   // Selectors
   mediaPicker()
