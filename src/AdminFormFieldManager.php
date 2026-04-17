@@ -36,8 +36,9 @@ class AdminFormFieldManager
         public readonly MediaRepository $mediaRepo,
         public readonly AdminUrlGenerator $adminUrlGenerator,
     ) {
+        /** @var ?User */
         $user = $security->getUser();
-        $this->user = $user instanceof User ? $user : null;
+        $this->user = $user; // null === $securityTokenStorage->getToken() || ! ($user = $securityTokenStorage->getToken()->getUser()) instanceof User ? null : $user; // $security->getUser();
     }
 
     public function getEntityManager(): EntityManagerInterface
