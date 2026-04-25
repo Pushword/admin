@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Tests;
 
 use PHPUnit\Framework\Attributes\Group;
@@ -7,12 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[Group('integration')]
-class AdminTest extends AbstractAdminTestClass
+final class AdminTest extends AbstractAdminTestClass
 {
     public function testLogin(): void
     {
         $this->tearDown();
-        $client = static::createClient();
+        $client = self::createClient();
 
         $client->request(Request::METHOD_GET, '/admin/');
         self::assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode(), (string) $client->getResponse()->getContent());

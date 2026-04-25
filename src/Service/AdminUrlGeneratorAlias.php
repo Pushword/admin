@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Service;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -37,11 +39,11 @@ class AdminUrlGeneratorAlias
             'admin_page_delete' => $this->generatePageDelete($parameters),
             'admin_cheatsheet_edit' => $this->generateCheatSheetEdit($parameters),
 
-            'admin_media_list' => $this->generateMediaList($parameters),
+            'admin_media_list' => $this->generateMediaList(),
             'admin_media_edit' => $this->generateMediaEdit($parameters),
             'admin_media_create', 'admin_media_new' => $this->generateMediaCreate(),
 
-            'admin_user_list' => $this->generateUserList($parameters),
+            'admin_user_list' => $this->generateUserList(),
             'admin_user_edit' => $this->generateUserEdit($parameters),
             'admin_user_create', 'admin_user_new' => $this->generateUserCreate(),
 
@@ -145,10 +147,7 @@ class AdminUrlGeneratorAlias
     }
 
     // Media methods
-    /**
-     * @param array<string, mixed> $parameters
-     */
-    private function generateMediaList(array $parameters = []): string
+    private function generateMediaList(): string
     {
         return $this->adminUrlGenerator
             ->setController(MediaCrudController::class)
@@ -181,10 +180,7 @@ class AdminUrlGeneratorAlias
     }
 
     // User methods
-    /**
-     * @param array<string, mixed> $parameters
-     */
-    private function generateUserList(array $parameters = []): string
+    private function generateUserList(): string
     {
         return $this->adminUrlGenerator
             ->setController(UserCrudController::class)

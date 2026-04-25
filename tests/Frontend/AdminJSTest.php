@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Tests\Frontend;
 
 use Facebook\WebDriver\WebDriverBy;
@@ -10,7 +12,7 @@ use PHPUnit\Framework\Attributes\Group;
  * Uses Symfony Panther to test in a real browser.
  */
 #[Group('panther')]
-class AdminJSTest extends AbstractPantherAdminTest
+final class AdminJSTest extends AbstractPantherAdminTest
 {
     private const string SELECTOR_PANELS = '.pw-settings-accordion, .collapse';
 

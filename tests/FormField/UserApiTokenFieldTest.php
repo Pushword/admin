@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Tests\FormField;
 
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
@@ -104,7 +106,7 @@ final class UserApiTokenFieldTest extends TestCase
 
     public function testFieldSetsHasTokenDataAttributeWhenNoToken(): void
     {
-        $user = $this->createUser(null);
+        $user = $this->createUser();
         $this->admin->method('getSubject')->willReturn($user);
 
         $field = $this->createField();

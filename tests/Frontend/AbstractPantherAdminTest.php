@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Tests\Frontend;
 
 use Exception;
@@ -136,11 +138,9 @@ abstract class AbstractPantherAdminTest extends AbstractAdminTestClass
         parent::setUpBeforeClass();
     }
 
-    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
-
         // Dismiss any lingering modals from previous tests
         if (null !== self::$loggedInClient && self::$isLoggedIn) {
             try {
@@ -202,7 +202,6 @@ abstract class AbstractPantherAdminTest extends AbstractAdminTestClass
         return $client;
     }
 
-    #[Override]
     protected function tearDown(): void
     {
         // Don't quit the client between tests - reuse the logged-in session

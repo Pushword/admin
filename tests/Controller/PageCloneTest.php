@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Tests\Controller;
 
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -11,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[Group('integration')]
-class PageCloneTest extends AbstractAdminTestClass
+final class PageCloneTest extends AbstractAdminTestClass
 {
     public function testClonePage(): void
     {
@@ -19,12 +21,12 @@ class PageCloneTest extends AbstractAdminTestClass
         $client->catchExceptions(false);
 
         /** @var PageRepository $pageRepo */
-        $pageRepo = static::getContainer()->get(PageRepository::class);
+        $pageRepo = self::getContainer()->get(PageRepository::class);
         $page = $pageRepo->findOneBy(['slug' => 'homepage']);
         self::assertNotNull($page, 'Fixture page "homepage" must exist');
 
         /** @var AdminUrlGenerator $urlGenerator */
-        $urlGenerator = clone static::getContainer()->get(AdminUrlGenerator::class);
+        $urlGenerator = clone self::getContainer()->get(AdminUrlGenerator::class);
         $cloneUrl = $urlGenerator
             ->unsetAll()
             ->setController(PageCrudController::class)
@@ -40,13 +42,13 @@ class PageCloneTest extends AbstractAdminTestClass
         $client->request(Request::METHOD_GET, $path);
 
         $location = $client->getResponse()->headers->get('Location') ?? '';
-        self::assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode(), 'Location: '.$location.' | Body: '.(string) $client->getResponse()->getContent());
+        self::assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode(), 'Location: '.$location.' | Body: '.$client->getResponse()->getContent());
         self::assertStringNotContainsString('login', $location);
 
         // Container is rebuilt after the HTTP request — fetch fresh instances
         /** @var PageRepository $pageRepo */
-        $pageRepo = static::getContainer()->get(PageRepository::class);
-        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $pageRepo = self::getContainer()->get(PageRepository::class);
+        $em = self::getContainer()->get('doctrine.orm.entity_manager');
 
         $clone = $pageRepo->findOneBy(['slug' => 'homepage-copy']);
         self::assertNotNull($clone, 'Cloned page "homepage-copy" must exist. Redirect was to: '.$location);

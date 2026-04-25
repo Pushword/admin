@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Pushword\Admin\Tests\Menu;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -7,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Pushword\Admin\Controller\PageCrudController;
 use Pushword\Admin\Menu\AdminMenuItemsEvent;
 
-class AdminMenuItemsEventTest extends TestCase
+final class AdminMenuItemsEventTest extends TestCase
 {
     public function testAddMenuItem(): void
     {
