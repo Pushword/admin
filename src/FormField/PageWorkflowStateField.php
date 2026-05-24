@@ -5,6 +5,7 @@ namespace Pushword\Admin\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use Pushword\Core\Entity\Page;
 use Symfony\Component\Workflow\Exception\InvalidArgumentException;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 /**
  * Shows the current editorial state and renders the transitions the current
@@ -16,24 +17,24 @@ class PageWorkflowStateField extends AbstractField
 {
     public function getEasyAdminField(): ?FieldInterface
     {
-        return $this->buildEasyAdminField('workflowState', null, [
-            'disabled' => true,
-            'label' => 'adminPageWorkflowStateLabel',
-            'help' => $this->renderTransitions(),
-            'help_html' => true,
-        ]);
-    }
-
-    private function renderTransitions(): string
-    {
         $page = $this->admin->getSubject();
 
         try {
             $workflow = $this->formFieldManager->workflowRegistry->get($page, 'page_editorial');
         } catch (InvalidArgumentException) {
-            return '';
+            return null; // editorial workflow not registered: hide the field
         }
 
+        return $this->buildEasyAdminField('workflowState', null, [
+            'disabled' => true,
+            'label' => 'adminPageWorkflowStateLabel',
+            'help' => $this->renderTransitions($page, $workflow),
+            'help_html' => true,
+        ]);
+    }
+
+    private function renderTransitions(object $page, WorkflowInterface $workflow): string
+    {
         $transitions = [];
         foreach ($workflow->getEnabledTransitions($page) as $transition) {
             $transitions[] = $transition->getName();
