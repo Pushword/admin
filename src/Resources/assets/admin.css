@@ -155,7 +155,6 @@
 }
 
 #main-menu .menu .submenu > li.menu-item > a {
-  margin: 0 4px;
   padding: 4px 10px;
   border-radius: 5px;
 }
@@ -171,6 +170,19 @@
 
 #main-menu .menu .submenu > li.menu-item > a:hover {
   background: #e2e8f0; /* slate-200 */
+}
+
+#main-menu .menu-item.has-submenu.expanded > .submenu {
+  padding: 0;
+}
+#main-menu .menu .submenu .menu-item {
+  margin: 0;
+}
+
+#main-menu .menu .menu-item,
+#main-menu .menu .submenu .menu-item.active {
+  margin-inline-start: 0;
+  padding-inline-start: 0;
 }
 
 #main-menu .menu .submenu > li.menu-item.active > a {
@@ -229,9 +241,9 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
-[role="button"]:focus-visible,
-[role="option"]:focus-visible,
-[tabindex]:focus-visible:not([tabindex="-1"]) {
+[role='button']:focus-visible,
+[role='option']:focus-visible,
+[tabindex]:focus-visible:not([tabindex='-1']) {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
 }
