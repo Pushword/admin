@@ -359,7 +359,7 @@ class PageCrudController extends AbstractAdminCrudController
     private function initializeNewPage(Page $page): void
     {
         if ('' === $page->locale) {
-            $page->locale = $this->apps->get()->getLocale();
+            $page->locale = $this->apps->get()->locale;
         }
 
         if ('' === $page->host) {
@@ -600,7 +600,7 @@ class PageCrudController extends AbstractAdminCrudController
 
         return new Response($this->adminFormFieldManager->twig->render($template, [
             'entity' => ['instance' => $page],
-            'value' => 'weight' === $field ? $page->getWeight() : null,
+            'value' => 'weight' === $field ? $page->weight : null,
             'field' => null,
         ]));
     }
