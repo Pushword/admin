@@ -1,0 +1,17 @@
+{# Offered by admin.unsavedChanges.js when the browser holds edits the server never
+   received. Stays hidden until then. #}
+<div id="pw-unsaved-banner" class="pw-unsaved" role="status" hidden>
+  <svg class="pw-unsaved__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v3.5c0 .199.079.39.22.53l2 2a.75.75 0 101.06-1.06l-1.78-1.78V6.75z" clip-rule="evenodd" />
+  </svg>
+  <span id="pw-unsaved-message" class="pw-unsaved__message"></span>
+  <span class="pw-unsaved__actions">
+    <button id="pw-unsaved-restore" type="button" class="btn btn-sm btn-primary">
+      {{ 'adminPageUnsavedRestore'|trans }}
+    </button>
+    {# Kept quiet on purpose: it throws the recovered work away for good. #}
+    <button id="pw-unsaved-discard" type="button" class="btn btn-sm btn-outline-secondary">
+      {{ 'adminPageUnsavedDiscard'|trans }}
+    </button>
+  </span>
+</div>
