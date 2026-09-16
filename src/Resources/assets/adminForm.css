@@ -10,15 +10,17 @@
 
 /** Add some space between the Admin Header and the panel under */
 .content-header {
-  margin-bottom: 30px;
+  margin-bottom: 12px;
+  margin-top: 12px;
   padding: 0;
   background-color: transparent;
 }
 
-/* The title is hidden, so nothing holds the buttons at the end of the row any more */
+/* The title is hidden, so nothing holds the buttons at the end of the row any more.
+   The backdrop is painted by .content-header::before, not here: a background on this
+   element only covers the buttons, leaving the rest of the sticky band see-through. */
 .ea-edit .page-actions,
 .ea-new .page-actions {
-  background-color: rgba(255, 255, 255, 0.5);
   padding: 5px;
   margin-top: -10px;
   margin-right: -5px;
@@ -41,7 +43,19 @@
   white-space: nowrap;
 }
 
-/* Have sticky save button even on mobile */
+/* Have sticky save button even on mobile.
+   The band needs its own opaque backdrop or the page scrolls visibly through it.
+   It is drawn by a pseudo-element rather than background-color because .page-actions
+   is pulled 10px above the header box and would otherwise stick out of the paint. */
+body.ea-edit .content-header::before,
+body.ea-new .content-header::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--ea-sp-8) * -1) 0;
+  z-index: -1;
+  background-color: var(--bs-body-bg, #fff);
+}
+
 body.ea-edit .content-header,
 body.ea-new .content-header {
   inset-block-start: 0px !important;
@@ -55,19 +69,28 @@ body.ea-new .content-header {
   @keyframes stuck-styles {
     to {
       background: pink;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--pw-elevation-1);
       padding-bottom: 2rem;
     }
   }
   */
 }
 
+/* Ten of these stack in the edit form's right column, and a border plus a fill plus
+   a shadow is three separators doing one job. A recessed fill alone is enough to
+   bound a closed panel, which frees raised-and-white to mean "this is the one you
+   have open" — the only hierarchy the column had was none. */
 .columnFields .form-fieldset.pw-settings-accordion {
-  background-color: var(--sidebar-bg, #f9fafb);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 0.5rem;
+  background-color: #f1f5f9; /* slate-100, recessed below the white page */
+  border: 0;
+  border-radius: var(--pw-radius-md);
   margin-bottom: 1rem;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+  box-shadow: none; /* EasyAdmin draws .form-fieldset's hairline as an inset ring */
+}
+
+.columnFields .form-fieldset.pw-settings-accordion.pw-settings-open {
+  background-color: #fff;
+  box-shadow: var(--pw-elevation-1);
 }
 
 .pw-settings-toggle {
@@ -78,7 +101,7 @@ body.ea-new .content-header {
   background: transparent;
   border: 0;
   color: #0f172a;
-  font-size: 0.95rem;
+  font-size: var(--pw-text-md);
   font-weight: 600;
   padding: 0.4rem 0;
   cursor: pointer;
@@ -140,7 +163,7 @@ body.ea-new .content-header {
 
 .form-column .form-fieldset-header {
   padding: calc(var(--bs-gutter-x) / 4) var(--bs-gutter-x) calc(var(--bs-gutter-x) / 4);
-  box-shadow: 0 1px 2px #0000000d;
+  box-shadow: var(--pw-elevation-1);
 }
 
 /* A collection entry rendered by useEntryCrudForm() carries the entry CRUD's own
@@ -194,10 +217,10 @@ body.ea-new .content-header {
   margin-block-end: 1rem;
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--bs-border-color);
-  border-radius: var(--bs-border-radius);
+  border-radius: var(--pw-radius-md);
   background-color: var(--bs-tertiary-bg);
   color: var(--bs-body-color);
-  font-size: 0.875rem;
+  font-size: var(--pw-text-sm);
 }
 
 .pw-unsaved[hidden] {

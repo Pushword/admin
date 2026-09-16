@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\TextAlign;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -82,7 +83,6 @@ class PageCrudController extends AbstractAdminCrudController
         return $crud
             ->setDefaultSort(['updatedAt' => 'DESC'])
             ->setPaginatorPageSize($this->getRequestedPageSize())
-            ->showEntityActionsInlined()
             ->addFormTheme('@pwAdmin/form/admin_form_theme.html.twig')
             ->addFormTheme('@PushwordAdminBlockEditor/editorjs_widget.html.twig')
             ->overrideTemplates([
@@ -94,15 +94,23 @@ class PageCrudController extends AbstractAdminCrudController
     #[Override]
     public function configureActions(Actions $actions): Actions
     {
+        $viewAction = Action::new('viewPage', 'adminPageViewLabel', 'fa fa-eye')
+            ->linkToUrl(fn (Page $page): string => $this->routeGenerator->generate($page, true))
+            ->setHtmlAttributes(['target' => '_blank', 'rel' => 'noopener']);
+
+        $actions->add(Crud::PAGE_INDEX, $viewAction);
+
         $cloneAction = Action::new('clonePage', 'adminPageCloneLabel', 'fa fa-copy')
             ->linkToCrudAction('clonePage')
-            ->setTemplatePath('@pwAdmin/crud/action_post.html.twig');
+            ->setTemplatePath('@pwAdmin/crud/action_post.html.twig')
+            ->renderAsForm();
 
         $actions->add(Crud::PAGE_INDEX, $cloneAction);
 
         $promoteVariantAction = Action::new('promoteVariant', 'adminPagePromoteVariantLabel', 'fa fa-arrow-up')
             ->linkToCrudAction('promoteVariant')
             ->setTemplatePath('@pwAdmin/crud/action_post.html.twig')
+            ->renderAsForm()
             ->displayIf(static fn (Page $page): bool => $page->isVariant());
 
         $actions->add(Crud::PAGE_INDEX, $promoteVariantAction);
@@ -240,7 +248,7 @@ class PageCrudController extends AbstractAdminCrudController
                     ->setChoices($this->getMetaRobotsChoices()),
             );
 
-        if (class_exists(PushwordStaticGeneratorBundle::class)) {
+        if ($this->holdIsAvailable()) {
             $filters->add(PageHoldFilter::new('holdPublicationAt', 'adminPageHoldFilterLabel'));
         }
 
@@ -497,6 +505,16 @@ class PageCrudController extends AbstractAdminCrudController
     }
 
     /**
+     * Whether a page can be "held": meaningful whenever the static-generator
+     * bundle is installed, since both the full static export (`pw:static`) and
+     * `cache: static` mode keep the previously generated file while a hold is set.
+     */
+    private function holdIsAvailable(): bool
+    {
+        return class_exists(PushwordStaticGeneratorBundle::class);
+    }
+
+    /**
      * @return iterable<FieldInterface|string>
      */
     private function getIndexFields(): iterable
@@ -505,13 +523,21 @@ class PageCrudController extends AbstractAdminCrudController
             ->setSortable(true)
             ->setTemplatePath('@pwAdmin/components/published_toggle.html.twig');
 
+        yield TextField::new('h1', 'adminPageH1Label')
+            ->setTemplatePath('@pwAdmin/page/pageListTitleField.html.twig')
+            ->setSortable(false);
+
+        if ($this->holdIsAvailable()) {
+            yield DateTimeField::new('holdPublicationAt', 'adminPageHoldLabel')
+                ->setSortable(true)
+                ->setTextAlign(TextAlign::CENTER)
+                ->setTemplatePath('@pwAdmin/components/hold_toggle.html.twig');
+        }
+
         yield IntegerField::new('weight', 'adminPageWeightLabel')
             ->setSortable(true)
             ->setTemplatePath('@pwAdmin/components/weight_inline_field.html.twig');
 
-        yield TextField::new('h1', 'adminPageH1Label')
-            ->setTemplatePath('@pwAdmin/page/pageListTitleField.html.twig')
-            ->setSortable(false);
         yield DateTimeField::new('updatedAt', 'adminPageUpdatedAtLabel')
             ->setSortable(true)
             ->setFormat('short');

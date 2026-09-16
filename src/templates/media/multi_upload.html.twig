@@ -28,12 +28,15 @@
     </div>
 
     <div id="pw-tag-all-bar" class="d-flex align-items-center gap-2 mt-4" style="display:none;">
-      <label for="pw-tag-all" class="mb-0 text-nowrap"><strong>{{ 'adminMediaMultiUploadTagAll'|trans }}</strong></label>
+      {# One row, one control size: the label used to be bold where no other admin label
+         is, and the button was the only blue-outline button in the admin — three pixels
+         shorter than the field it sits next to. #}
+      <label for="pw-tag-all" class="mb-0 text-nowrap">{{ 'adminMediaMultiUploadTagAll'|trans }}</label>
       <div style="position:relative; flex:1; max-width:420px;">
         <input type="text" id="pw-tag-all" class="form-control form-control-sm" data-tags="{{ all_tags|json_encode }}" data-delimiter=" " autocomplete="off">
         <div class="textSuggester" style="display:none;"></div>
       </div>
-      <button type="button" id="pw-tag-all-btn" class="btn btn-outline-primary btn-sm text-nowrap">{{ 'adminMediaMultiUploadTagAllApply'|trans }}</button>
+      <button type="button" id="pw-tag-all-btn" class="btn btn-secondary text-nowrap">{{ 'adminMediaMultiUploadTagAllApply'|trans }}</button>
     </div>
 
     <table id="pw-upload-table" class="table table-sm mt-4" style="display:none;">
@@ -56,7 +59,7 @@
   <style>
     #pw-drop-zone {
       border: 2px dashed #ced4da;
-      border-radius: 8px;
+      border-radius: var(--pw-radius-md);
       padding: 48px 24px;
       text-align: center;
       cursor: pointer;
@@ -72,7 +75,7 @@
       background: transparent;
       padding: 2px 4px;
       width: 100%;
-      border-radius: 3px;
+      border-radius: var(--pw-radius-sm);
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -90,23 +93,23 @@
     }
     #pw-upload-table textarea { resize: vertical; min-height: 32px; height: 32px; }
     #pw-upload-table textarea:focus { min-height: 60px; }
-    #pw-upload-table .pw-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 4px; border: 1px solid #dee2e6; box-shadow: 0 1px 3px rgba(0,0,0,.1); cursor: pointer; }
+    #pw-upload-table .pw-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: var(--pw-radius-sm); border: 1px solid #dee2e6; box-shadow: var(--pw-elevation-1); cursor: pointer; }
     .pw-status-ok { color: #198754; }
     .pw-status-err { color: #dc3545; }
     .pw-status-spin { display: inline-block; width: 16px; height: 16px; border: 2px solid #ccc; border-top-color: #0d6efd; border-radius: 50%; animation: pw-spin .6s linear infinite; }
     @keyframes pw-spin { to { transform: rotate(360deg); } }
     #pw-upload-table td { vertical-align: middle; }
     .pw-row-actions { white-space: nowrap; }
-    .pw-row-actions .btn { padding: 2px 6px; font-size: 12px; }
+    .pw-row-actions .btn { padding: 2px 6px; font-size: var(--pw-text-xs); }
     .pw-filename-cell { white-space: nowrap; }
-    .pw-filename-cell input { display: inline-block; width: auto; max-width: calc(100% - 30px); font-family: monospace; font-size: 13px; }
-    .pw-ext { font-size: 12px; vertical-align: middle; font-family: monospace; }
+    .pw-filename-cell input { display: inline-block; width: auto; max-width: calc(100% - 30px); font-family: monospace; font-size: var(--pw-text-sm); }
+    .pw-ext { font-size: var(--pw-text-xs); vertical-align: middle; font-family: monospace; }
     .pw-license-row td { background: rgba(255,193,7,.08); }
-    .pw-license-row summary { cursor: pointer; font-size: 13px; color: #664d03; }
+    .pw-license-row summary { cursor: pointer; font-size: var(--pw-text-sm); color: #664d03; }
     .pw-license-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 8px; }
-    .pw-license-input { display: flex; flex-direction: column; font-size: 11px; color: #6c757d; }
-    .pw-license-input input { border: 1px solid #dee2e6; background: #fff; font-size: 13px; }
+    .pw-license-input { display: flex; flex-direction: column; font-size: var(--pw-text-xs); color: #6c757d; }
+    .pw-license-input input { border: 1px solid #dee2e6; background: #fff; font-size: var(--pw-text-sm); }
     .pw-lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .pw-lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+    .pw-lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: var(--pw-radius-md); box-shadow: var(--pw-elevation-3); }
   </style>
 {% endblock %}

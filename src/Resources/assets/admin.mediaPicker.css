@@ -24,12 +24,12 @@
 #Review_mediaList .accordion-item {
   background-color: var(--sidebar-bg, #f9fafb);
   border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 1px 2px #0000000d;
+  box-shadow: var(--pw-elevation-1);
   border-radius: 0;
 }
 
 .pw-media-picker {
-  border-radius: 0.75rem;
+  border-radius: var(--pw-radius-lg);
   padding: 0.5rem 0.75rem;
   background: transparent;
   display: flex;
@@ -50,7 +50,7 @@
 
 .pw-media-picker__thumb {
   width: 140px;
-  border-radius: 0.5rem;
+  border-radius: var(--pw-radius-md);
   overflow: hidden;
   flex-shrink: 0;
   background: #f3f3f3;
@@ -84,7 +84,7 @@
 }
 
 .pw-media-picker__info {
-  font-size: 0.875rem;
+  font-size: var(--pw-text-sm);
   color: #6b7280;
 }
 
@@ -114,7 +114,7 @@
 .pw-media-picker__thumb-change {
   inset: 0;
   width: 100%;
-  font-size: 1.25rem;
+  font-size: var(--pw-text-lg);
   background: rgba(15, 23, 42, 0);
   opacity: 0;
   transition: opacity 0.15s ease, background-color 0.15s ease;
@@ -133,7 +133,7 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  font-size: 0.8rem;
+  font-size: var(--pw-text-xs);
   background: rgba(15, 23, 42, 0.6);
   z-index: 2;
   transition: background-color 0.15s ease;
@@ -194,12 +194,12 @@
   flex: 1;
   /*
   height: 90%;
-  border-radius: 0.75rem;
+  border-radius: var(--pw-radius-lg);
   */
   height: 100%;
   border: 0;
   display: block;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--pw-elevation-3);
 }
 
 @media (min-width: 992px) {
@@ -218,9 +218,12 @@
   opacity: 1;
 }
 
-body.pw-admin-popup-modal .sidebar,
-body.pw-admin-popup-modal header.navbar,
+/* EasyAdmin 5 renamed the menu column: the menu lives in .sidebar-wrapper and there
+   is no top navbar anymore. Batch selection means nothing while picking one media,
+   so the per-card checkboxes and the select-all that commands them go too. */
+body.pw-admin-popup-modal .sidebar-wrapper,
 body.pw-admin-popup-modal .user-menu-wrapper,
+body.pw-admin-popup-modal .media-mosaic__select-all,
 body.pw-admin-popup-modal .media-mosaic__checkbox {
   display: none !important;
 }
@@ -249,8 +252,10 @@ body.pw-admin-popup-modal.ea-edit .content-top {
   display: none !important;
 }
 
+/* .wrapper is a two-column grid (menu, content); with the menu column gone the
+   content has to take the whole width instead of landing in the menu column. */
 body.pw-admin-popup-modal .wrapper {
-  --sidebar-max-width: 0;
+  grid-template-columns: auto;
 }
 
 body.pw-admin-popup-modal .modal-backdrop {
@@ -305,16 +310,16 @@ body.pw-admin-popup-modal .modal-backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: var(--pw-text-md);
   font-weight: 700;
   z-index: 10;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  box-shadow: var(--pw-elevation-1);
 }
 
 .pw-media-picker-multi .media-mosaic__card.pw-multi-selected {
   outline: 3px solid var(--color-primary, #0284c7);
   outline-offset: 3px;
-  border-radius: 8px;
+  border-radius: var(--pw-radius-md);
 }
 
 .pw-multi-select-bar {
@@ -330,7 +335,7 @@ body.pw-admin-popup-modal .modal-backdrop {
   padding: 14px 20px;
   background: rgba(30,41,59,0.95);
   backdrop-filter: blur(8px);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 -8px 20px rgb(15 23 42 / 0.18);
 }
 
 .sf-toolbar ~ .pw-multi-select-bar {
@@ -342,9 +347,9 @@ body.pw-admin-popup-modal .modal-backdrop {
   background: var(--color-primary, #0284c7);
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--pw-radius-md);
   font-weight: 600;
-  font-size: 14px;
+  font-size: var(--pw-text-sm);
   cursor: pointer;
 }
 
@@ -357,8 +362,8 @@ body.pw-admin-popup-modal .modal-backdrop {
   background: transparent;
   color: #94a3b8;
   border: 1px solid #475569;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: var(--pw-radius-md);
+  font-size: var(--pw-text-sm);
   cursor: pointer;
 }
 

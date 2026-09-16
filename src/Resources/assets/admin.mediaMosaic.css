@@ -1,5 +1,31 @@
-.media-view-switch .btn.active {
-  color: #475569;
+/* Segmented control. The current half used to differ only by text colour — and by the
+   lighter of the two, so it read as the disabled one. It wins by fill instead, reusing
+   the sky-100 the sidebar already uses to mean "this is where you are". */
+.media-view-switch .btn {
+  color: var(--text-muted);
+}
+
+.media-view-switch .btn.active,
+.media-view-switch .btn.active:hover,
+.media-view-switch .btn.active:focus-visible {
+  position: relative; /* draw this segment's border over its neighbour's */
+  z-index: 1;
+  border-color: #7dd3fc; /* sky-300 */
+  color: var(--color-primary);
+  font-weight: 600;
+  background-color: #e0f2fe; /* sky-100 */
+}
+
+/* Delete sits on every card of what is now the default view. A destructive action
+   used once in a while should not be the loudest thing in a grid of thumbnails, so
+   it stays slate at rest and turns red only when the pointer or keyboard reaches it. */
+.media-mosaic__actions a.action-delete {
+  color: var(--text-muted);
+}
+
+.media-mosaic__actions a.action-delete:hover,
+.media-mosaic__actions a.action-delete:focus-visible {
+  color: var(--bs-danger);
 }
 
 .media-mosaic-wrapper {
@@ -14,7 +40,7 @@
 
 .media-mosaic__card {
   border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
+  border-radius: var(--pw-radius-lg);
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -35,9 +61,18 @@
   bottom: 0.75rem;
   left: 0.75rem;
   z-index: 2;
-  font-size: 0.75rem;
+  font-size: var(--pw-text-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  pointer-events: none;
+}
+
+.mosaic-license-label {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  font-size: var(--pw-text-xs);
   pointer-events: none;
 }
 
@@ -95,7 +130,7 @@
 
 .media-mosaic__title {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--pw-text-md);
   font-weight: 600;
   line-height: 1.2;
 }
@@ -111,7 +146,7 @@
 
 .media-mosaic__filename {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: var(--pw-text-sm);
   color: #94a3b8;
 }
 
@@ -120,7 +155,7 @@
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.125rem 0.5rem;
-  font-size: 0.85rem;
+  font-size: var(--pw-text-sm);
 }
 
 .media-mosaic__meta dt {
@@ -143,7 +178,7 @@
 .media-mosaic__footer {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: var(--pw-text-xs);
   color: #94a3b8;
   margin-top: auto;
 }
@@ -161,7 +196,7 @@
   text-align: center;
   padding: 2rem;
   border: 1px dashed #cbd5f5;
-  border-radius: 0.75rem;
+  border-radius: var(--pw-radius-lg);
   color: #94a3b8;
   background-color: #f8fafc;
 }

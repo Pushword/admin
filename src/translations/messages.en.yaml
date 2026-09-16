@@ -8,6 +8,11 @@ adminDraft: Draft
 adminEdit: Edit
 adminEdition: Edition
 adminElementDeleted: "Element deleted."
+adminEmptyStateClearSearch: "Clear search and filters"
+adminEmptyStateFilteredHint: "No entry matches your search or filters. Try a broader search, or clear them to see everything."
+adminEmptyStateFilteredTitle: "No result"
+adminEmptyStateHint: "This list is empty. Add the first entry to get started."
+adminEmptyStateTitle: "Nothing here yet"
 adminLabelCheatsheet: Cheatsheet
 adminLabelCheckContent: "Content scan"
 adminLabelContent: Pages
@@ -111,6 +116,7 @@ adminMediaPickerTitle: "Media library"
 adminMediaPickerUpload: Upload
 adminPaginationRatioLabelLabel: Ratio
 adminPaginationPerPage: "Per page"
+adminPageActionsLabel: Actions
 adminPageAuthorLabel: Author
 adminPageBrokenImageWarning: "This page references image(s) that no longer exist. They are skipped when the page is displayed:"
 adminPageCloneLabel: Clone
@@ -136,6 +142,7 @@ adminPageH1Help: "<small>The <em>H1</em> is visible on your pages while the <cod
 adminPageH1Label: Title
 adminPageHoldBadge: On hold
 adminPageHoldFilterLabel: Hold publication
+adminPageHoldLabel: Hold publication
 adminPageHoldOnlyHeld: On hold
 adminPageHoldOnlyLive: Live
 adminPageHoldToggleHelp: "Hold publication: keep the published static version online while editing; the change goes live once released."
@@ -208,6 +215,7 @@ adminPageUpdatedAtLabel: "Updated on"
 adminPageVariantLabel: Variant
 adminPageVariantOfHelp: "<small>Make this page a variant of a master page: it consolidates onto the master for SEO (canonical → master) and is excluded from sitemap, search and menus.</small>"
 adminPageVariantOfLabel: "Variant of (master page)"
+adminPageViewLabel: View
 adminPageWeightHelp: "Allows sorting pages. Higher values appear first."
 adminPageWeightLabel: Weight
 adminPageTwitterCardHelp: '<a href="https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started" target=_blanks>Learn more</a>'

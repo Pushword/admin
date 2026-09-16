@@ -1,25 +1,35 @@
 {% extends '@EasyAdmin/crud/index.html.twig' %}
 
-{% set pwMediaView = app.request.query.get('view') ?? '' %}
-{% set mosaicActive = pwMediaView == 'mosaic' %}
+{# MediaCrudController resolves this: the query parameter when there is one, otherwise
+   the choice remembered for the session, otherwise mosaic. #}
+{% set mosaicActive = mediaView|default('mosaic') != 'table' %}
 {% set isTableView = not mosaicActive %}
 {% set mediaFallbackThumb = constant('Pushword\\Admin\\Utils\\Thumb::PLACEHOLDER_DATA_URI') %}
+{# Shared by both layouts. An undecided media ('') has nothing to show, so it is
+   deliberately absent here. #}
+{% set licenseStateLabels = {
+  seeded: 'adminMediaLicenseStateSeeded',
+  thirdParty: 'adminMediaLicenseStateThirdParty',
+  overridden: 'adminMediaLicenseStateOverridden',
+} %}
 
 {% block global_actions %}
   {{ parent() }}
-  <a href="{{ path('admin_media_multi_upload') }}" class="btn btn-primary ms-2">
+  {# Secondary: "Add Media" is the primary action of this screen, and two filled
+     buttons side by side leave the eye no way to tell which one is the default. #}
+  <a href="{{ path('admin_media_multi_upload') }}" class="btn btn-secondary ms-2">
     <i class="fas fa-upload" aria-hidden="true"></i>
     <span class="d-none d-sm-inline ms-1">{{ 'adminMediaMultiUpload'|trans }}</span>
   </a>
   <div class="btn-group ms-2 media-view-switch" role="group" aria-label="{{ 'adminMediaViewLabel'|trans }}">
-    <a href="{{ ea_url().set('view', null) }}"
-       class="btn  btn-secondary btn-outline-default {{ isTableView ? 'active' }}"
+    <a href="{{ ea_url().set('view', 'table') }}"
+       class="btn btn-secondary {{ isTableView ? 'active' }}"
        aria-pressed="{{ isTableView ? 'true' : 'false' }}">
       <i class="fa fa-list" aria-hidden="true"></i>
       <span class="d-none d-sm-inline ms-1">{{ 'adminMediaViewTable'|trans }}</span>
     </a>
     <a href="{{ ea_url().set('view', 'mosaic') }}"
-       class="btn btn-secondary btn-outline-Save  {{ mosaicActive ? 'active' }}"
+       class="btn btn-secondary {{ mosaicActive ? 'active' }}"
        aria-pressed="{{ mosaicActive ? 'true' : 'false' }}">
       <i class="fa fa-th-large" aria-hidden="true"></i>
       <span class="d-none d-sm-inline ms-1">{{ 'adminMediaViewMosaic'|trans }}</span>
@@ -85,6 +95,14 @@
               {% if media.ratioLabel %}
                 <span class="mosaic-box-label badge bg-black text-white">{{ media.ratioLabel }}</span>
               {% endif %}
+              {# The checkbox owns the top-left and the ratio the bottom-left, so the
+                 licence state takes the one free corner. #}
+              {% if licenseStateLabels[media.licenseState] is defined %}
+                <span class="mosaic-license-label badge {{ media.licenseState == 'thirdParty' ? 'bg-warning text-dark' : 'bg-light text-body' }}"
+                  title="{{ 'adminMediaLicenseStateLabel'|trans }}">
+                  <i class="fa fa-copyright"></i> {{ licenseStateLabels[media.licenseState]|trans }}
+                </span>
+              {% endif %}
               <span class="media-mosaic__preview">
                 <img src="{{ thumbnail }}" alt="{{ media.alt ?: media.fileName }}" loading="lazy">
               </span>
@@ -141,7 +159,7 @@
                               url="{{ item.linkUrl }}"
                               icon="{{ item.icon }}"
                               icon:class="action-icon"
-                              htmlAttributes="{{ item.htmlAttributes }}"
+                              htmlAttributes="{{ item.htmlAttributes|ea_html_attrs }}"
                               renderAsForm="{{ item.isRenderedAsForm }}"
                               label="{{ item.label|trans }}"
                               label:class="action-label"
@@ -202,12 +220,6 @@
     {% set num_results = visible_entities|length %}
     {% set some_results_are_hidden = num_results != entities|length %}
     {% set currentSort = app.request.query.all('sort') %}
-    {# An undecided media ('') has nothing to show, so it is deliberately absent here. #}
-    {% set licenseStateLabels = {
-      seeded: 'adminMediaLicenseStateSeeded',
-      thirdParty: 'adminMediaLicenseStateThirdParty',
-      overridden: 'adminMediaLicenseStateOverridden',
-    } %}
 
     {% if num_results > 0 %}
       <div id="pw-media-table"
@@ -287,12 +299,32 @@
                 <td class="pw-m-date">{% if media.updatedAt %}<span title="{{ media.updatedAt|format_datetime }}">{{ media.updatedAt|format_date('short') }}</span>{% endif %}</td>
                 <td class="pw-row-actions">
                   <span class="pw-row-status d-inline"></span>
-                  <a href="{{ editUrl }}" class="btn btn-outline-secondary btn-sm" title="{{ 'adminMediaPickerEdit'|trans }}">
-                    <i class="fas fa-pencil-alt"></i>
-                  </a>
-                  <button type="button" class="btn btn-outline-danger btn-sm pw-delete-btn" data-id="{{ media.id }}" data-confirm="{{ 'delete.confirm'|trans({}, 'EasyAdminBundle') }}" title="{{ 'action.delete'|trans({}, 'EasyAdminBundle') }}">
-                    <i class="fas fa-trash"></i>
-                  </button>
+                  {# Same row menu as the page list: one quiet toggle, delete behind it
+                     rather than a red button standing at full strength on every row. #}
+                  <twig:ea:ActionMenu class="dropdown-actions pw-row-menu">
+                    <twig:ea:ActionMenu:Button withoutDropdownToggleMarker aria-label="{{ 'adminPageActionsLabel'|trans }}">
+                      <twig:ea:Icon name="internal:dots-horizontal" />
+                    </twig:ea:ActionMenu:Button>
+                    <twig:ea:ActionMenu:Overlay>
+                      <twig:ea:ActionMenu:ActionList>
+                        <li>
+                          <a class="dropdown-item action-edit dropdown-item-variant-default" href="{{ editUrl }}">
+                            <span class="icon action-icon"><i class="fas fa-pencil-alt"></i></span>
+                            <span class="action-label">{{ 'adminMediaPickerEdit'|trans }}</span>
+                          </a>
+                        </li>
+                        <li>
+                          <button type="button"
+                            class="dropdown-item action-delete dropdown-item-variant-danger pw-delete-btn"
+                            data-id="{{ media.id }}"
+                            data-confirm="{{ 'delete.confirm'|trans({}, 'EasyAdminBundle') }}">
+                            <span class="icon action-icon"><i class="fas fa-trash"></i></span>
+                            <span class="action-label">{{ 'action.delete'|trans({}, 'EasyAdminBundle') }}</span>
+                          </button>
+                        </li>
+                      </twig:ea:ActionMenu:ActionList>
+                    </twig:ea:ActionMenu:Overlay>
+                  </twig:ea:ActionMenu>
                 </td>
               </tr>
             {% endfor %}
@@ -325,9 +357,9 @@
     .pw-media-table { border-collapse: separate; border-spacing: 0; }
     .pw-media-table td { vertical-align: middle; padding: 10px 8px; border-top: 1px solid #eef1f5; }
     .pw-media-table tbody tr:hover { background: #f8fafc; }
-    .pw-media-table thead th { font-size: 12px; font-weight: 600; color: #64748b; border-bottom: 2px solid #e2e8f0; }
+    .pw-media-table thead th { font-size: var(--pw-text-xs); font-weight: 600; color: #64748b; border-bottom: 2px solid #e2e8f0; }
     .pw-m-date-col { white-space: nowrap; text-align: right; }
-    .pw-m-date { white-space: nowrap; font-size: 12px; color: #64748b; text-align: right; }
+    .pw-m-date { white-space: nowrap; font-size: var(--pw-text-xs); color: #64748b; text-align: right; }
 
     .pw-m-row { display: flex; gap: 14px; align-items: flex-start; }
     .pw-m-thumb-wrap { position: relative; flex: 0 0 auto; width: 96px; }
@@ -339,9 +371,9 @@
       width: 96px;
       max-height: 110px;
       overflow: hidden;
-      border-radius: 6px;
+      border-radius: var(--pw-radius-md);
       border: 1px solid #dee2e6;
-      box-shadow: 0 1px 4px rgba(0,0,0,.12);
+      box-shadow: var(--pw-elevation-1);
       background-color: #f1f5f9;
     }
     .pw-m-thumb::before {
@@ -357,15 +389,15 @@
       opacity: .6;
     }
     .pw-media-table .pw-thumb { position: relative; z-index: 1; display: block; width: 100%; height: 100%; max-height: 110px; object-fit: contain; cursor: zoom-in; }
-    .pw-m-ratio { position: absolute; left: 4px; top: 4px; z-index: 2; background: rgba(0,0,0,.65); color: #fff; font-size: 10px; line-height: 1; padding: 2px 5px; border-radius: 3px; }
-    .pw-m-fileicon { display: flex; width: 72px; height: 72px; align-items: center; justify-content: center; color: #94a3b8; border: 1px solid #dee2e6; border-radius: 6px; }
+    .pw-m-ratio { position: absolute; left: 4px; top: 4px; z-index: 2; background: rgba(0,0,0,.65); color: #fff; font-size: var(--pw-text-xs); line-height: 1; padding: 2px 5px; border-radius: var(--pw-radius-sm); }
+    .pw-m-fileicon { display: flex; width: 72px; height: 72px; align-items: center; justify-content: center; color: #94a3b8; border: 1px solid #dee2e6; border-radius: var(--pw-radius-md); }
 
     .pw-m-body { flex: 1 1 auto; min-width: 0; }
     .pw-media-table input,
     .pw-media-table textarea {
       border: 1px solid transparent;
       background: transparent;
-      border-radius: 4px;
+      border-radius: var(--pw-radius-sm);
       padding: 2px 5px;
       width: 100%;
       max-width: 100%;
@@ -382,12 +414,12 @@
       outline: none;
       box-shadow: 0 0 0 3px rgba(13,110,253,.12);
     }
-    .pw-m-name { font-size: 15px; font-weight: 600; color: #1e293b; }
+    .pw-m-name { font-size: var(--pw-text-md); font-weight: 600; color: #1e293b; }
     .pw-m-fileline { display: flex; align-items: center; gap: 0; margin-top: 1px; flex-wrap: wrap; }
-    .pw-media-table .pw-m-fileline .pw-m-slug { font-family: monospace; font-size: 12px; color: #64748b; width: auto; field-sizing: content; min-width: 4ch; flex: 0 1 auto; max-width: 100%; padding-right: 0; }
-    .pw-m-fileline .pw-ext { font-family: monospace; font-size: 12px; color: #94a3b8; white-space: nowrap; margin-left: -2px; }
-    .pw-m-open { color: #94a3b8; font-size: 11px; padding-left: 6px; white-space: nowrap; }
-    .pw-m-meta-col { white-space: nowrap; font-size: 12px; color: #64748b; text-align: right; }
+    .pw-media-table .pw-m-fileline .pw-m-slug { font-family: monospace; font-size: var(--pw-text-xs); color: #64748b; width: auto; field-sizing: content; min-width: 4ch; flex: 0 1 auto; max-width: 100%; padding-right: 0; }
+    .pw-m-fileline .pw-ext { font-family: monospace; font-size: var(--pw-text-xs); color: #94a3b8; white-space: nowrap; margin-left: -2px; }
+    .pw-m-open { color: #94a3b8; font-size: var(--pw-text-xs); padding-left: 6px; white-space: nowrap; }
+    .pw-m-meta-col { white-space: nowrap; font-size: var(--pw-text-xs); color: #64748b; text-align: right; }
     th.pw-m-meta-col { text-align: right; }
     .pw-m-meta-col > div { margin: 2px 0; }
     .pw-m-meta-col .badge { font-weight: 500; }
@@ -397,17 +429,16 @@
     .pw-m-tags .textSuggester { top: 100%; left: 0; }
     .pw-m-alts { display: flex; align-items: flex-start; gap: 6px; color: #94a3b8; margin-top: 2px; }
     .pw-m-alts .fa-language { padding-top: 6px; }
-    .pw-m-altsinput { resize: vertical; min-height: 30px; height: 30px; font-size: 12px; font-style: italic; overflow: hidden; }
+    .pw-m-altsinput { resize: vertical; min-height: 30px; height: 30px; font-size: var(--pw-text-xs); font-style: italic; overflow: hidden; }
     .pw-m-altsinput:focus { min-height: 56px; overflow: auto; }
 
     .pw-media-table .pw-row-actions { white-space: nowrap; text-align: right; }
-    .pw-media-table .pw-row-actions .btn { padding: 2px 6px; font-size: 12px; }
     .pw-status-ok { color: #198754; }
     .pw-status-err { color: #dc3545; }
     .pw-status-spin { display: inline-block; width: 16px; height: 16px; border: 2px solid #ccc; border-top-color: #0d6efd; border-radius: 50%; animation: pw-spin .6s linear infinite; }
     @keyframes pw-spin { to { transform: rotate(360deg); } }
     .pw-lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
-    .pw-lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+    .pw-lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: var(--pw-radius-md); box-shadow: var(--pw-elevation-3); }
   </style>
 {% endblock %}
 

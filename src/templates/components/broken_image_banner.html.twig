@@ -3,7 +3,7 @@
   {% set brokenImages = pw_broken_images(entity.instance) %}
   {% if brokenImages is not empty %}
     <div class="pw-broken-image-banner"
-         style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border: 1px solid #ef4444; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);"
+         style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border: 1px solid #ef4444; border-radius: var(--pw-radius-md); padding: 12px 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);"
          role="alert">
       <div style="display: flex; align-items: flex-start; gap: 12px;">
         <div style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #ef4444; border-radius: 50%; flex-shrink: 0;">
@@ -12,8 +12,8 @@
           </svg>
         </div>
         <div style="flex-grow: 1;">
-          <div style="font-size: 14px; font-weight: 600; color: #991b1b;">{{ 'adminPageBrokenImageWarning'|trans }}</div>
-          <ul style="margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: #7f1d1d;">
+          <div style="font-size: var(--pw-text-sm); font-weight: 600; color: #991b1b;">{{ 'adminPageBrokenImageWarning'|trans }}</div>
+          <ul style="margin: 6px 0 0; padding-left: 18px; font-size: var(--pw-text-sm); color: #7f1d1d;">
             {% for src in brokenImages %}
               <li><code>{{ src }}</code></li>
             {% endfor %}

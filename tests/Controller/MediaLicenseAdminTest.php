@@ -57,6 +57,31 @@ final class MediaLicenseAdminTest extends AbstractAdminTestClass
         return $media;
     }
 
+    private function createThirdPartyMedia(): Media
+    {
+        $media = $this->createMedia([MediaLicense::CREATOR => ['Enrico Romanzi']]);
+        $media->licenseState = MediaLicense::STATE_THIRD_PARTY;
+
+        /** @var EntityManager $em */
+        $em = self::getContainer()->get('doctrine.orm.entity_manager');
+        $em->flush();
+
+        return $media;
+    }
+
+    /** @param array<string, string> $query */
+    private function browseIndexFilteredOnTestMedia(array $query = []): Crawler
+    {
+        $client = $this->loginUser();
+        $client->catchExceptions(false);
+
+        $router = self::getContainer()->get('router');
+
+        return $client->request(Request::METHOD_GET, $router->generate('admin_media_index', [
+            'query' => '__license_admin_test__',
+        ] + $query));
+    }
+
     private function remove(Media $media): void
     {
         /** @var EntityManager $em */
@@ -396,27 +421,52 @@ final class MediaLicenseAdminTest extends AbstractAdminTestClass
      * Creating a media redirects here, which makes this row the editor's first look at
      * what the upload decided.
      */
-    public function testTheIndexShowsTheLicenseStateOfEachMedia(): void
+    public function testTheTableViewShowsTheLicenseStateOfEachMedia(): void
     {
-        $media = $this->createMedia([MediaLicense::CREATOR => ['Enrico Romanzi']]);
-        $media->licenseState = MediaLicense::STATE_THIRD_PARTY;
+        $media = $this->createThirdPartyMedia();
 
-        /** @var EntityManager $em */
-        $em = self::getContainer()->get('doctrine.orm.entity_manager');
-        $em->flush();
-
-        $client = $this->loginUser();
-        $client->catchExceptions(false);
-
-        $router = self::getContainer()->get('router');
-        $crawler = $client->request(Request::METHOD_GET, $router->generate('admin_media_index', [
-            'query' => '__license_admin_test__',
-        ]));
+        // The index defaults to the mosaic, so ask for the table explicitly.
+        $crawler = $this->browseIndexFilteredOnTestMedia(['view' => 'table']);
 
         self::assertStringContainsString(
             self::getContainer()->get('translator')->trans('adminMediaLicenseStateThirdParty'),
             $crawler->filter('.pw-media-table')->html(),
         );
+
+        $this->remove($media);
+    }
+
+    public function testTheMosaicShowsTheLicenseStateOfEachMedia(): void
+    {
+        $media = $this->createThirdPartyMedia();
+
+        // No view parameter: the mosaic is the default, so the badge has to live there
+        // too or the licence state is invisible unless you switch layouts.
+        $crawler = $this->browseIndexFilteredOnTestMedia();
+
+        self::assertCount(1, $crawler->filter('.media-mosaic-wrapper'), 'The default layout is the mosaic');
+
+        $badge = $crawler->filter('.media-mosaic__card .mosaic-license-label');
+        self::assertCount(1, $badge);
+        self::assertStringContainsString(
+            self::getContainer()->get('translator')->trans('adminMediaLicenseStateThirdParty'),
+            $badge->text(),
+        );
+
+        $this->remove($media);
+    }
+
+    public function testAnUndecidedMediaCarriesNoLicenceBadge(): void
+    {
+        // An undecided media ('') is deliberately absent from the label map: a badge
+        // reading "nothing was decided" on every card is noise, not information.
+        $media = $this->createMedia();
+
+        $crawler = $this->browseIndexFilteredOnTestMedia();
+
+        self::assertSame('', $media->licenseState);
+        self::assertCount(1, $crawler->filter('.media-mosaic__card'));
+        self::assertCount(0, $crawler->filter('.media-mosaic__card .mosaic-license-label'));
 
         $this->remove($media);
     }
