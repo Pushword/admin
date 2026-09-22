@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Pushword\Admin\Tests\Frontend;
 
+use Facebook\WebDriver\Interactions\WebDriverActions;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverDimension;
+use Facebook\WebDriver\WebDriverHasInputDevices;
 use PHPUnit\Framework\Attributes\Group;
 
 /**
@@ -23,6 +26,66 @@ final class AdminJSTest extends AbstractPantherAdminTest
     private const string SELECTOR_TITLE_INPUT = '.titleToMeasure';
 
     private const string SELECTOR_HOST_SELECT = 'select[name$="[host]"]';
+
+    public function testListSearchFillsHeaderAndIncludesMagnifierInHitArea(): void
+    {
+        $client = $this->createPantherClientWithLogin();
+        $client->request('GET', $this->generateAdminUrl('admin_page_list'));
+
+        $this->waitForElement($client, 'input[type="search"][name="query"]', 'No list search input found');
+
+        $searchFillsHeaderScript =
+            'const header = document.querySelector(".content-top")?.getBoundingClientRect();
+             const search = document.querySelector(".content-search")?.getBoundingClientRect();
+             const input = document.querySelector("input[type=search][name=query]");
+             const inputRect = input?.getBoundingClientRect();
+             const icon = document.querySelector(".content-search-icon")?.getBoundingClientRect();
+             if (!header || !search || !input || !inputRect || !icon) return false;
+             const hitTarget = document.elementFromPoint(icon.x + icon.width / 2, icon.y + icon.height / 2);
+             return inputRect.width > search.width * 0.9
+                 && inputRect.height >= 48
+                 && Math.abs(inputRect.left - header.left) < 1
+                 && Math.abs(inputRect.top - header.top) < 1
+                 && Math.abs(inputRect.bottom - header.bottom) < 1
+                 && hitTarget === input;';
+
+        self::assertTrue(
+            $this->pollUntilTrue($client, $searchFillsHeaderScript, [], self::timeoutShort()),
+            'The list search should fill its header on desktop',
+        );
+
+        $client->executeScript('document.activeElement?.blur()');
+        $icon = $client->findElement(WebDriverBy::cssSelector('.content-search-icon'));
+        $webDriver = $client->getWebDriver();
+        self::assertInstanceOf(WebDriverHasInputDevices::class, $webDriver);
+        new WebDriverActions($webDriver)->moveToElement($icon)->click()->perform();
+
+        $inputIsFocused = $client->executeScript(
+            'return document.activeElement === document.querySelector("input[type=search][name=query]")'
+        );
+
+        self::assertTrue($inputIsFocused, 'Clicking the magnifier should focus the list search input');
+        self::assertTrue(
+            $client->executeScript(
+                'const input = document.querySelector("input[type=search][name=query]");
+                 const style = getComputedStyle(input);
+                 return style.outlineStyle === "none" && style.boxShadow.includes("inset");'
+            ),
+            'The list search focus indicator should be drawn inside the input',
+        );
+
+        $originalWindowSize = $webDriver->manage()->window()->getSize();
+
+        try {
+            $webDriver->manage()->window()->setSize(new WebDriverDimension(390, 844));
+            self::assertTrue(
+                $this->pollUntilTrue($client, $searchFillsHeaderScript, [], self::timeoutShort()),
+                'The list search should fill its header on mobile',
+            );
+        } finally {
+            $webDriver->manage()->window()->setSize($originalWindowSize);
+        }
+    }
 
     /**
      * Test panel open state memorization.
