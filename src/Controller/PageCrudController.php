@@ -34,10 +34,10 @@ use Override;
 use Pushword\Admin\Crud\PageCrudExtensionInterface;
 use Pushword\Admin\Filter\PageHoldFilter;
 use Pushword\Admin\Filter\PageSearchFilter;
+use Pushword\Admin\Service\PageViewUrlGenerator;
 use Pushword\Core\Controller\PageController;
 use Pushword\Core\Entity\Page;
 use Pushword\Core\Repository\PageRepository;
-use Pushword\Core\Router\PushwordRouteGenerator;
 use Pushword\Core\Service\EditorNotice\TwigErrorMarker;
 use Pushword\Core\Service\VariantManager;
 use Pushword\Core\Utils\FlashBag;
@@ -61,7 +61,7 @@ class PageCrudController extends AbstractAdminCrudController
      * @param iterable<PageCrudExtensionInterface> $extensions
      */
     public function __construct(
-        private readonly PushwordRouteGenerator $routeGenerator,
+        private readonly PageViewUrlGenerator $pageViewUrlGenerator,
         private readonly PageController $pageController,
         private readonly PageRepository $pageRepo,
         private readonly TwigErrorExtractor $errorExtractor,
@@ -93,7 +93,7 @@ class PageCrudController extends AbstractAdminCrudController
     public function configureActions(Actions $actions): Actions
     {
         $viewAction = Action::new('viewPage', 'adminPageViewLabel', 'fa fa-eye')
-            ->linkToUrl(fn (Page $page): string => $this->routeGenerator->generate($page, true))
+            ->linkToUrl($this->getPageUrl(...))
             ->setHtmlAttributes(['target' => '_blank', 'rel' => 'noopener']);
 
         $actions->add(Crud::PAGE_INDEX, $viewAction);
@@ -400,13 +400,7 @@ class PageCrudController extends AbstractAdminCrudController
 
     public function getPageUrl(Page $page): string
     {
-        return $this->routeGenerator->generate(
-            $page->slug,
-            false,
-            null,
-            $page->host,
-            ! $this->apps->isDefaultHost($page->host)
-        );
+        return $this->pageViewUrlGenerator->generate($page);
     }
 
     private function redirectToPage(AdminContext $context): ?RedirectResponse // @phpstan-ignore missingType.generics
@@ -416,13 +410,7 @@ class PageCrudController extends AbstractAdminCrudController
             return null;
         }
 
-        $redirectUrl = $this->getPageUrl($page);
-
-        if ('' === $redirectUrl) {
-            return null;
-        }
-
-        return new RedirectResponse($redirectUrl);
+        return new RedirectResponse($this->getPageUrl($page));
     }
 
     #[Override]
