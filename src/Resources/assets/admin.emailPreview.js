@@ -3,6 +3,15 @@ export function initEmailPreview(root = document) {
     if (panel.dataset.initialized) return
     panel.dataset.initialized = 'true'
 
+    const header = document.querySelector('body:is(.ea-edit, .ea-new) .content-header')
+    if (header && panel.querySelector('[data-design-panel]')) {
+      const updateHeaderOffset = () => {
+        panel.style.setProperty('--pw-newsletter-header-offset', `calc(${header.offsetHeight}px + var(--ea-sp-8))`)
+      }
+      new ResizeObserver(updateHeaderOffset).observe(header)
+      updateHeaderOffset()
+    }
+
     panel.querySelectorAll('[data-preview-width]').forEach((button) => {
       button.addEventListener('click', () => {
         panel.dataset.viewport = button.dataset.previewWidth
@@ -44,15 +53,19 @@ export function initEmailPreview(root = document) {
     function designValues() {
       const data = new FormData(form)
       const prefix = kind === 'template' ? 'EmailTemplate' : 'email_design'
-      const fields = kind === 'template' ? ['name', 'wrapped', 'headerMarkdown', 'footerMarkdown'] : ['emailLayout', 'headerMarkdown', 'footerMarkdown']
+      const fields = kind === 'template' ? ['name', 'wrapped', 'headerMarkdown', 'footerMarkdown'] : ['emailLayout', 'headerMarkdown', 'footerMarkdown', 'signatureMarkdown']
       return JSON.stringify(fields.map((name) => data.get(`${prefix}[${name}]`)))
     }
 
-    function updateLayout() {
+    function updateLayout(layoutChanged = false) {
       if (kind === 'audience') {
         const layout = form.querySelector('[name="email_design[emailLayout]"]:checked')?.value || ''
         const custom = layout.startsWith('twig:') || layout.startsWith('saved:')
-        panel.querySelector('[data-email-editable]').hidden = custom
+        panel.querySelector('[data-email-editable]').hidden = custom || layout === 'personal'
+        if (layoutChanged) {
+          const signature = panel.querySelector('[data-email-personal]')
+          signature.open = layout === 'personal' || location.hash === '#email_design_signatureMarkdown'
+        }
         panel.querySelector('[data-email-template-help]').hidden = !custom
       }
       dirty = !['campaign', 'automation'].includes(kind) && designValues() !== savedValues
@@ -62,7 +75,7 @@ export function initEmailPreview(root = document) {
       }
     }
 
-    updateLayout()
+    updateLayout(true)
 
     async function update(version) {
       request = new AbortController()
@@ -96,7 +109,7 @@ export function initEmailPreview(root = document) {
     function schedule(event) {
       if (!panel.isConnected) return
       if (event && previewFields && !previewFields.includes(event.target.name)) return
-      updateLayout()
+      updateLayout(event?.target.name === 'email_design[emailLayout]')
       clearTimeout(timer)
       request?.abort()
       const version = ++revision

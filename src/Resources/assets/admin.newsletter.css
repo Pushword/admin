@@ -43,13 +43,6 @@ body[data-newsletter] .content {
   outline-offset: var(--focus-ring-offset);
 }
 
-.pw-newsletter-description {
-  max-inline-size: 65ch;
-  margin-block: 0 2rem;
-  color: var(--bs-secondary-color);
-  font-size: var(--pw-text-md);
-}
-
 .pw-newsletter-status {
   display: flex;
   flex-wrap: wrap;
@@ -203,6 +196,10 @@ body[data-newsletter] .pw-newsletter-sequence .accordion-item {
   overflow: hidden;
 }
 
+.pw-newsletter-sequence .form-fieldset-body > .row {
+  min-inline-size: 0;
+}
+
 @media (max-width: 767.98px) {
   .pw-newsletter-nav {
     gap: 0.25rem;
@@ -349,16 +346,18 @@ body[data-newsletter] .pw-newsletter-sequence .accordion-item {
   margin-block-start: 0.25rem;
 }
 
-.pw-newsletter-layout-thumbnail[data-layout='simple'] {
+.pw-newsletter-layout-thumbnail[data-layout='simple'],
+.pw-newsletter-layout-thumbnail[data-layout='personal'] {
   background: var(--bs-body-bg);
+}
+
+.pw-newsletter-layout-thumbnail[data-layout='personal'] b,
+.pw-newsletter-layout-thumbnail[data-layout='personal'] small {
+  display: none;
 }
 
 .pw-newsletter-layout-thumbnail[data-layout='preset'] b {
   background: var(--color-primary);
-}
-
-.pw-newsletter-design-tokens {
-  line-height: 1.65;
 }
 
 .pw-newsletter-design-preset {
@@ -524,15 +523,19 @@ body[data-newsletter] :is(.form-text, .form-help) {
   font-weight: 600;
 }
 
-.pw-newsletter-design-tokens code {
-  color: var(--bs-body-color);
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  background: var(--bs-tertiary-bg);
-}
-
 .pw-newsletter-layout-option:has(:checked) .pw-newsletter-layout-description {
   color: var(--bs-body-color);
+}
+
+.pw-newsletter-design .pw-newsletter-design-presets {
+  margin-block: 1rem 0;
+}
+
+.pw-newsletter-design-presets summary,
+.pw-newsletter-design-signature summary {
+  padding-block: 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .pw-newsletter-selection {
@@ -581,7 +584,7 @@ body[data-newsletter] .datagrid .dropdown-toggle[role='button'] {
   .pw-newsletter-design-switch {
     display: flex;
     position: sticky;
-    inset-block-start: 0;
+    inset-block-start: var(--pw-newsletter-header-offset, 0px);
     z-index: 5;
     padding-block: 0.5rem;
     background: var(--bs-body-bg);
@@ -840,7 +843,7 @@ body[data-newsletter] :is(.form-fieldset-body, .form-group)[hidden] {
   .pw-newsletter-composer .pw-newsletter-design-switch {
     display: flex;
     position: sticky;
-    inset-block-start: 0;
+    inset-block-start: var(--pw-newsletter-header-offset, 0px);
     z-index: 5;
     padding-block: 0.5rem;
     background: var(--bs-body-bg);

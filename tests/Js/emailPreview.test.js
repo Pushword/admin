@@ -9,7 +9,7 @@ function pendingResponse() {
 }
 
 function editHeader(value) {
-  const input = document.querySelector('textarea')
+  const input = document.querySelector('[name="email_design[headerMarkdown]"]')
   input.value = value
   input.dispatchEvent(new Event('input', { bubbles: true }))
 }
@@ -24,7 +24,9 @@ describe('live email design preview', () => {
         <form action="/admin/newsletter/audience/1/email-design">
           <input type="radio" name="email_design[emailLayout]" value="simple" checked>
           <input type="radio" name="email_design[emailLayout]" value="twig:brand">
+          <input type="radio" name="email_design[emailLayout]" value="personal">
           <div data-email-editable><textarea name="email_design[headerMarkdown]"></textarea><textarea name="email_design[footerMarkdown]"></textarea></div>
+          <details data-email-personal><summary>Personal email signature</summary><textarea name="email_design[signatureMarkdown]"></textarea></details>
           <textarea name="email_design[sampleBody]"></textarea>
           <p data-email-template-help hidden>Defined in Twig</p>
           <input type="hidden" name="email_design[_token]" value="csrf-token">
@@ -63,6 +65,47 @@ describe('live email design preview', () => {
     document.querySelector('[value="simple"]').click()
     expect(document.querySelector('[data-email-editable]').hidden).toBe(false)
     expect(document.querySelector('textarea').value).toBe('My header')
+  })
+
+  it('shows only the personal signature controls and tracks signature edits', async () => {
+    document.querySelector('[value="personal"]').click()
+    expect(document.querySelector('[data-email-editable]').hidden).toBe(true)
+    expect(document.querySelector('[data-email-template-help]').hidden).toBe(true)
+    expect(document.querySelector('[data-email-personal]').open).toBe(true)
+    const signature = document.querySelector('[name="email_design[signatureMarkdown]"]')
+    signature.value = '**Robin**'
+    signature.dispatchEvent(new Event('input', { bubbles: true }))
+    await vi.advanceTimersByTimeAsync(250)
+    expect(fetch.mock.calls[0][1].body.get('email_design[signatureMarkdown]')).toBe('**Robin**')
+    document.querySelector('[value="simple"]').click()
+    expect(document.querySelector('[data-email-personal]').open).toBe(false)
+    expect(document.querySelector('[data-email-editable]').hidden).toBe(false)
+    expect(document.querySelector('[data-save-state]').textContent).toBe('Unsaved')
+    signature.value = ''
+    signature.dispatchEvent(new Event('input', { bubbles: true }))
+    expect(document.querySelector('[data-save-state]').textContent).toBe('Saved')
+  })
+
+  it('opens a directly linked signature without changing the audience layout', () => {
+    const panel = document.querySelector('[data-pw-email-preview]')
+    panel.removeAttribute('data-initialized')
+    window.history.replaceState({}, '', '/#email_design_signatureMarkdown')
+    initEmailPreview()
+    expect(document.querySelector('[data-email-personal]').open).toBe(true)
+    expect(document.querySelector('[value="simple"]').checked).toBe(true)
+    expect(document.querySelector('[data-save-state]').textContent).toBe('Saved')
+    window.history.replaceState({}, '', '/')
+  })
+
+  it('keeps a manually opened signature available while editing a newsletter design', () => {
+    const signature = document.querySelector('[data-email-personal]')
+    signature.open = true
+    const input = signature.querySelector('textarea')
+    input.value = 'Robin'
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    expect(signature.open).toBe(true)
+    expect(document.querySelector('[value="simple"]').checked).toBe(true)
+    expect(document.querySelector('[data-save-state]').textContent).toBe('Unsaved')
   })
 
   it('can initialize a validation error page without a selected layout', () => {
@@ -132,7 +175,7 @@ describe('live email design preview', () => {
   it('compares a refused form with the saved values and normalizes copyright characters', () => {
     const panel = document.querySelector('[data-pw-email-preview]')
     panel.removeAttribute('data-initialized')
-    panel.dataset.savedValues = '["simple","Saved header","\\u00a9 Site"]'
+    panel.dataset.savedValues = '["simple","Saved header","\\u00a9 Site",""]'
     document.querySelector('[name="email_design[headerMarkdown]"]').value = 'Saved header'
     document.querySelector('[name="email_design[footerMarkdown]"]').value = '© Site'
     initEmailPreview()
