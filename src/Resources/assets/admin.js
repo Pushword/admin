@@ -38,6 +38,8 @@ import { textareaAutoSize, textareaWithoutNewLine } from './admin.textareaHelper
 import { memorizeOpenPanel } from './admin.memorizeOpenPanel'
 import { revealInvalidField } from './admin.revealInvalidField'
 import { showTitlePixelWidth } from './admin.formHelpers'
+import { prioritizeSaveActions } from './admin.formActions'
+import { initApiTokenFields } from './admin.apiToken'
 
 // State modules
 import { retrieveCurrentPageHost } from './admin.pageState'
@@ -90,6 +92,8 @@ window.addEventListener('load', function () {
   initMonacoEditors()
 
   // Form helpers
+  prioritizeSaveActions()
+  initApiTokenFields()
   showTitlePixelWidth()
   showTitlePixelWidth('desc', 150)
 

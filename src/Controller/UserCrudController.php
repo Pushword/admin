@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -15,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use LogicException;
 use Override;
+use Pushword\Admin\FormField\UserRolesField;
 use Pushword\Core\Entity\EntityClassRegistry;
 use Pushword\Core\Entity\User;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
@@ -43,6 +45,7 @@ class UserCrudController extends AbstractAdminCrudController
             ->setEntityLabelInSingular('adminLabelUser')
             ->setEntityLabelInPlural('adminLabelUsers')
             ->setDefaultSort(['createdAt' => 'DESC'])
+            ->setFormOptions(['attr' => ['class' => 'pw-compact-form']])
             ->addFormTheme('@pwAdmin/form/admin_form_theme.html.twig')
             ->addFormTheme('@pwAdmin/form/api_token_theme.html.twig');
     }
@@ -83,12 +86,12 @@ class UserCrudController extends AbstractAdminCrudController
         );
         [$mainFields, $sidebarBlocks] = $fields;
 
-        yield FormField::addColumn('col-12 col-md-8 mainFields');
-        yield FormField::addFieldset();
+        yield FormField::addColumn('col-12 col-lg-7 mainFields');
+        yield FormField::addFieldset('adminUserLabelAccount');
         yield from $this->adminFormFieldManager->getEasyAdminFields($mainFields, $this);
 
         if ([] !== $sidebarBlocks) {
-            yield FormField::addColumn('col-12 col-md-4 columnFields');
+            yield FormField::addColumn('col-12 col-lg-5 columnFields');
             foreach ($sidebarBlocks as $groupName => $block) {
                 if (\is_string($groupName)) {
                     yield FormField::addFieldset($groupName);
@@ -111,20 +114,20 @@ class UserCrudController extends AbstractAdminCrudController
             ->formatValue(fn (?string $value, User $user): string => $this->formatUsernameColumn($user));
         yield EmailField::new('email', 'adminUserEmailLabel')
             ->setSortable(false);
-        yield TextField::new('rolesForListing', 'adminUserRoleLabel')
+        yield ArrayField::new('roles', 'adminUserRoleLabel')
             ->setSortable(false)
-            ->formatValue(fn (?string $value, User $user): string => implode(', ', array_map(
-                fn (string $role): string => $this->translator->trans(match ($role) {
-                    'ROLE_SUPER_ADMIN' => 'adminUserRoleSuperAdmin',
-                    'ROLE_ADMIN' => 'adminUserRoleAdmin',
-                    'ROLE_EDITOR' => 'adminUserRoleEditor',
-                    'ROLE_USER' => 'adminUserRoleUser',
-                    default => $role,
-                }),
-                $user->getRoles(),
-            )));
+            ->formatValue($this->formatRoles(...));
         yield DateTimeField::new('createdAt', 'adminUserCreatedAtLabel')
             ->setSortable(true);
+    }
+
+    /** @param string[] $roles */
+    private function formatRoles(array $roles): string
+    {
+        return implode(', ', array_map(
+            fn (string $role): string => $this->translator->trans(UserRolesField::ROLE_LABELS[$role] ?? $role),
+            $roles,
+        ));
     }
 
     /**

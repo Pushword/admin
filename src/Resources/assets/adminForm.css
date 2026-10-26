@@ -193,22 +193,118 @@ body.ea-new .content-header {
   flex-grow: 0;
 }
 
+/* Short settings forms opt in; writing canvases keep their available width. */
+.content :is(.ea-edit-form, .ea-new-form).pw-compact-form,
+.content:has(.pw-compact-form) .content-header {
+  max-inline-size: 60rem;
+}
+
+.content .pw-compact-form.pw-compact-form--single {
+  max-inline-size: 40rem;
+}
+
+.pw-compact-form--single .form-fieldset-body > .row > [class*='col-'] {
+  inline-size: 100%;
+}
+
+.pw-choice-list > .form-check {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  gap: 0.5rem;
+  padding-inline-start: 0;
+}
+
+.pw-choice-list > .form-check > .form-check-input {
+  float: none;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.pw-choice-list > .form-check > .form-check-label {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.pw-choice-list > .form-check > .form-check-label::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+.pw-api-token {
+  display: grid;
+  gap: 0.75rem;
+  min-inline-size: 0;
+}
+
+.pw-api-token input {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* Values remain useful to read even when the editor cannot change them. */
+.form-widget .form-control[readonly],
+.form-widget .form-control:disabled,
+.form-widget .form-select:disabled,
+.form-widget .form-select[readonly],
+.form-fieldset .form-help,
+.form-fieldset .form-widget :is(.form-help, .pw-help-summary),
+.pw-api-token .btn.pw-action-delete {
+  color: var(--bs-body-color);
+}
+
+.pw-api-token__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pw-api-token__actions .btn {
+  min-block-size: 2.75rem;
+}
+
+.pw-api-token__actions [hidden] {
+  display: none;
+}
+
+.pw-api-token .pw-action-delete:hover,
+.pw-api-token .pw-action-delete:focus-visible {
+  color: var(--bs-danger-text-emphasis);
+}
+
 @media (max-width: 575.98px) {
   .ea-edit .content-header,
   .ea-new .content-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     gap: 0.75rem;
   }
 
   .ea-edit .page-actions,
   .ea-new .page-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    inline-size: 100%;
     margin: 0;
     padding: 0;
+  }
+
+  .ea-edit .page-actions > :only-child,
+  .ea-new .page-actions > :only-child {
+    grid-column: 1 / -1;
   }
 
   .ea-edit .page-actions .btn,
   .ea-new .page-actions .btn {
     min-height: 44px;
     white-space: normal;
+    overflow-wrap: anywhere;
+    justify-content: center;
+    margin: 0;
   }
 }
 
@@ -324,32 +420,6 @@ body.ea-new .content-header {
 
 .ea-edit-Page .page-actions .action-saveAndContinue {
   color: var(--bs-body-color);
-}
-
-@media (max-width: 575.98px) {
-  .ea-edit-Page .page-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  .ea-edit-Page .page-actions .btn {
-    min-height: 44px;
-    margin: 0;
-    white-space: normal;
-    justify-content: center;
-  }
-
-  .ea-edit-Page .page-actions .action-saveAndReturn {
-    order: -2;
-  }
-
-  .ea-edit-Page .page-actions .action-saveAndContinue {
-    order: -1;
-  }
 }
 
 .mainFields:has(.editorjs-holder) .form-group:has(.h1Field),
