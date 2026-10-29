@@ -257,6 +257,7 @@ adminUserApiTokenRegenerate: "Régénérer"
 adminUserApiTokenRegenerateConfirm: "Régénérer le token ? L’ancien token ne fonctionnera plus."
 adminUserApiTokenRevoke: Révoquer
 adminUserApiTokenRevokeConfirm: Révoquer le token API ?
+adminUserBackToList: "Retour aux utilisateurs"
 adminUserCityLabel: Ville
 adminUserCreatedAtLabel: "Date d'enregistrement"
 adminUserDateOfBirthLabel: 'Date de naissance'
@@ -276,6 +277,7 @@ adminUserLastnameLabel: Nom
 adminUserLocaleLabel: "Langue de l’interface"
 adminUserPasswordHelp: "Laissez vide pour conserver le mot de passe actuel."
 adminUserPasswordLabel: 'Mot de passe'
+adminUserPasswordNewHelp: "Laissez vide pour se connecter par un lien reçu par e-mail."
 adminUserPhoneLabel: Téléphone
 adminUserRoleAdmin: Administrateur
 adminUserRoleEditor: "Éditeur"
