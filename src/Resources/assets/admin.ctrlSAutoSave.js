@@ -72,14 +72,21 @@ export function initCtrlSAutoSave() {
   }
 
   if (shortcut) {
+    // Cancel before EasyAdmin can disable the submit buttons. Wait to send the
+    // shortcut until the editor's capture listeners have finished.
+    const shortcutSubmissions = new WeakSet()
     form.addEventListener('submit', (event) => {
       if (event.submitter !== shortcut || event.defaultPrevented) return
       event.preventDefault()
-      triggerAutosave()
+      shortcutSubmissions.add(event)
+    }, { capture: true })
+    form.addEventListener('submit', (event) => {
+      if (shortcutSubmissions.delete(event)) triggerAutosave()
     })
   }
 
-  document.addEventListener(
+  // Editor controls can stop key events during window capture.
+  window.addEventListener(
     'keydown',
     (event) => {
       if (
