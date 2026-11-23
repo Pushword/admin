@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Pushword\Admin\Controller;
 
+use Doctrine\ORM\AbstractQuery;
 use Pushword\Admin\Service\PageEditLockManager;
+use Pushword\Core\Collaboration\LivePresence;
 use Pushword\Core\Entity\User;
+use Pushword\Core\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +21,8 @@ final class PageLockController extends AbstractController
 {
     public function __construct(
         private readonly PageEditLockManager $lockManager,
+        private readonly PageRepository $pages,
+        private readonly LivePresence $presence,
     ) {
     }
 
@@ -36,6 +41,16 @@ final class PageLockController extends AbstractController
 
         if (! $user instanceof User) {
             return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $version = $this->pages->createQueryBuilder('p')
+            ->select('p.writeVersion')
+            ->where('p.id = :id')
+            ->setParameter('id', $pageId)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        if (! is_numeric($version)) {
+            return new JsonResponse(['error' => 'Page not found'], Response::HTTP_NOT_FOUND);
         }
 
         // Release any session reopened after SessionSaveListener. Authentication
@@ -59,6 +74,8 @@ final class PageLockController extends AbstractController
             'lockInfo' => $lockInfo,
             'isOwner' => $acquired,
             'isSameUser' => $isSameUser,
+            'revision' => (string) $version,
+            'collaborative' => $this->presence->isActive('page:'.$pageId),
         ]);
     }
 }

@@ -145,6 +145,19 @@ adminPageCustomPropertiesLabel: 'Autres paramètres'
 adminPageEditMessageHelp: 'Précédente modification le %lastEditDatetime% <br> <em>%lastEditMessage%</em>'
 adminPageEditMessageHelpVersionned: 'Précédente modification le %lastEditDatetime% <br> <em>%lastEditMessage%</em> <br><a href="%seeVersionLink%">Voir l''historique</a>'
 adminPageEditMessageLabel: "Motif d'édition"
+adminPageDraftClassic: Passer en mode classique
+adminPageDraftConnected: Modifications enregistrées
+adminPageDraftInvalid: La sauvegarde collaborative a été refusée. Vos retouches restent dans l’éditeur.
+adminPageDraftJoin: Mode collaboratif
+adminPageDraftJoinActive: Rejoindre la coédition
+adminPageDraftOffline: Hors ligne. Gardez cet onglet ouvert.
+adminPageDraftPending: Enregistrement des modifications…
+adminPageDraftPresence: Un autre éditeur est en mode collaboratif.
+adminPageDraftSettings: Enregistrer les réglages
+adminPageDraftSettingsPending: Enregistrez le réglage de publication pour reprendre la sauvegarde en direct.
+adminPageDraftStale: Le contenu a changé hors de cette session. Vos retouches restent dans cet onglet.
+adminPageDraftTooLarge: Cette session a atteint sa taille maximale. Passez en mode classique pour enregistrer vos retouches.
+adminPageDraftUpdated: Contenu mis à jour par un autre participant
 adminPageEditLockRefresh: "Actualiser la page"
 adminPageEditLockWarning: "%user% est en train de modifier cette page. Vos modifications pourraient être écrasées."
 adminPageEditLockWarningSameUser: "Vous modifiez cette page dans un autre onglet ou navigateur."
@@ -197,6 +210,9 @@ adminPageRedirectFromPath: Chemin
 adminPageRedirectionFrom: De
 adminPageRedirectionTo: Vers
 adminPageRelatedPageLabel: 'Pages Associées'
+adminPageRevisionConflict: 'Cette page a changé depuis son ouverture. Ouvrez la dernière version avant d’enregistrer vos retouches.'
+adminPageRevisionDeleted: 'Cette page a été supprimée. Vos retouches sont toujours dans cet onglet.'
+adminPageRevisionReload: 'Ouvrir la dernière version'
 adminPageRevisions: Révisions
 adminSchedule: Planifier
 adminPageSearchExcreptHelp: '<small>Visible depuis les pages de résultats des moteurs de recherches (meta description) <span id="descWidth"></span></small>'

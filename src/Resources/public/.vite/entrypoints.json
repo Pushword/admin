@@ -12,6 +12,40 @@
       "legacy": false,
       "preload": []
     },
+    "collaborationPoc": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/build/collaborationPoc.js"
+      ],
+      "legacy": false,
+      "preload": [
+        "/build/yjs.js"
+      ]
+    },
+    "pageDraft": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/build/pageDraft.js"
+      ],
+      "legacy": false,
+      "preload": [
+        "/build/draftSession.js",
+        "/build/yjs.js"
+      ]
+    },
+    "draftSession": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/build/draftSession.js"
+      ],
+      "legacy": false,
+      "preload": [
+        "/build/yjs.js"
+      ]
+    },
     "mediaFileDrop": {
       "css": [],
       "dynamic": [],

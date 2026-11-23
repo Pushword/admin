@@ -146,6 +146,19 @@ adminPageCustomPropertiesLabel: "Other parameters"
 adminPageEditMessageHelp: "Previous edit on %lastEditDatetime% <br> <em>%lastEditMessage%</em>"
 adminPageEditMessageHelpVersionned: 'Previous edit on %lastEditDatetime% <br> <em>%lastEditMessage%</em> <br><a href="%seeVersionLink%">See history</a>'
 adminPageEditMessageLabel: "Reason of modification"
+adminPageDraftClassic: Switch to classic mode
+adminPageDraftConnected: Changes saved
+adminPageDraftInvalid: The collaborative save was rejected. Your edits are still in the editor.
+adminPageDraftJoin: Collaborative mode
+adminPageDraftJoinActive: Join live editing
+adminPageDraftOffline: Offline. Keep this tab open.
+adminPageDraftPending: Saving changes…
+adminPageDraftPresence: Someone else is editing collaboratively.
+adminPageDraftSettings: Save settings
+adminPageDraftSettingsPending: Save the publication setting to resume live saves.
+adminPageDraftStale: The saved version changed outside this session. Your edits are in this tab.
+adminPageDraftTooLarge: This session has reached its size limit. Switch to classic mode to save your edits.
+adminPageDraftUpdated: Content updated by another participant
 adminPageEditLockRefresh: "Refresh page"
 adminPageEditLockWarning: "%user% is currently editing this page. Your changes may be overwritten."
 adminPageEditLockWarningSameUser: "You are editing this page in another tab or browser."
@@ -198,6 +211,9 @@ adminPageRedirectFromPath: Path
 adminPageRedirectionFrom: From
 adminPageRedirectionTo: To
 adminPageRelatedPageLabel: "Associated Pages"
+adminPageRevisionConflict: 'This page changed since you opened it. Open the latest version before saving your edits.'
+adminPageRevisionDeleted: 'This page was deleted. Your unsaved edits are still in this tab.'
+adminPageRevisionReload: 'Open latest version'
 adminPageRevisions: Revisions
 adminSchedule: Schedule
 adminPageSearchExcreptHelp: '<small>Visible from search engine results pages (meta description) <span id="descWidth"></span></small>'

@@ -15,6 +15,7 @@ beforeEach(() => {
   vi.stubGlobal('window', dom.window)
   vi.stubGlobal('document', dom.window.document)
   vi.stubGlobal('sessionStorage', dom.window.sessionStorage)
+  vi.stubGlobal('CustomEvent', dom.window.CustomEvent)
   fetchMock = vi.fn(async () => ({
     ok: true,
     json: async () => ({ isOwner: true, lockInfo: null }),
@@ -88,4 +89,38 @@ it('restarts once when restored from the back-forward cache', async () => {
   await vi.advanceTimersByTimeAsync(3000)
   expect(fetchMock).toHaveBeenCalledTimes(3)
   expect(logged).not.toHaveBeenCalled()
+})
+
+it('forwards the saved revision even when this tab owns the lock', async () => {
+  document.body.innerHTML = '<form><input data-pw-page-revision></form>'
+  const form = document.querySelector('form')
+  const changed = vi.fn()
+  form.addEventListener('pw:page-revision', changed)
+  fetchMock.mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({ isOwner: true, lockInfo: null, revision: '4' }),
+  })
+  lock = initEditLock(1, form)
+  await vi.advanceTimersByTimeAsync(0)
+  expect(changed).toHaveBeenCalledOnce()
+  expect(changed.mock.calls[0][0].detail).toBe('4')
+})
+
+it('forwards collaborative presence independently of the saved revision', async () => {
+  document.body.innerHTML = '<form><input data-pw-page-revision value="4"></form>'
+  const form = document.querySelector('form')
+  const presence = vi.fn()
+  form.addEventListener('pw:collaboration-presence', presence)
+  fetchMock.mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({ isOwner: true, lockInfo: null, revision: '4', collaborative: true }),
+  }).mockResolvedValueOnce({
+    ok: false,
+    status: 404,
+  })
+  lock = initEditLock(1, form)
+  await vi.advanceTimersByTimeAsync(0)
+  expect(presence.mock.calls[0][0].detail).toBe(true)
+  await vi.advanceTimersByTimeAsync(3000)
+  expect(presence.mock.calls[1][0].detail).toBe(false)
 })
